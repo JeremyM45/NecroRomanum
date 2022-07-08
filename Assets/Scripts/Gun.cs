@@ -10,6 +10,7 @@ public class Gun : MonoBehaviour
   [Header("Stats")]
   [SerializeField] private float timeBetweenShots;
   [SerializeField] private float horizontalForce;
+  [SerializeField] private float verticalForce;
   
   private bool readyToShoot = true;
 
@@ -40,6 +41,7 @@ public class Gun : MonoBehaviour
     Rigidbody currentBulletRb = currentBullet.GetComponent<Rigidbody>();
     currentBullet.transform.forward = directionWithoutSpread.normalized;
     currentBulletRb.AddForce(directionWithoutSpread.normalized * horizontalForce, ForceMode.Impulse);
+    currentBulletRb.AddForce(playerCam.transform.up * verticalForce, ForceMode.Impulse);
     Invoke("ResetShot", timeBetweenShots);
   }
   private void ResetShot()
