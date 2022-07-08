@@ -42,3 +42,5 @@
 * Round mechanics
 * Points mechanics
 * Player inventory mechanics
+### Stretch Goals Tools/Resources
+* No additional Tool/Resources needed
