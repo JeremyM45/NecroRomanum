@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
   [SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
   [Header("Look Parameters")]
-  [SerializeField, Range(1, 10)] private float lookSpeed = 2f;
+  [SerializeField, Range(1, 1000)] private float lookSpeed = 2f;
   [SerializeField, Range(1, 90)] private float verticalLookLimit = 90f;
 
   [Header("Movement Parameters")]
@@ -19,7 +19,8 @@ public class PlayerController : MonoBehaviour
   [SerializeField] private float jumpForce = 10f;
   [SerializeField] private float gravity = 30f;
 
-  private Camera playerCam;
+  [SerializeField] private Transform arms;
+  private Animator playerAnimator;
   private CharacterController playerController;
   private Vector3 moveDirection;
   private Vector2 currentInput;
@@ -28,10 +29,12 @@ public class PlayerController : MonoBehaviour
   // Start is called before the first frame update
   void Awake()
   {
-    playerCam = GetComponentInChildren<Camera>();
+    playerAnimator = GetComponentInChildren<Animator>();
+    playerAnimator.Play("M1911Idle");
     playerController = GetComponent<CharacterController>();
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
+
   }
 
   // Update is called once per frame
@@ -59,10 +62,10 @@ public class PlayerController : MonoBehaviour
   }
   private void HandleLook()
   {
-    rotaionX -= Input.GetAxis("Mouse Y") * lookSpeed;
+    rotaionX -= Input.GetAxis("Mouse Y") * lookSpeed * Time.deltaTime;
     rotaionX = Mathf.Clamp(rotaionX, -verticalLookLimit, verticalLookLimit);
-    playerCam.transform.localRotation = Quaternion.Euler(rotaionX, 0, 0);
-    transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeed, 0);
+    arms.transform.localRotation = Quaternion.Euler(rotaionX, 0, 0);
+    transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X") * lookSpeed * Time.deltaTime, 0));
   }
   private void ApplyFinalMovements()
   {
