@@ -5,13 +5,17 @@ using UnityEngine.AI;
 
 public class EnemyAi : MonoBehaviour
 {
+  public bool HasHelmet {get; private set;} = true;
   [SerializeField] private float attackRange;
   [SerializeField] private int attackDamage;
+  [SerializeField] private int helmetHP;
+  [SerializeField] private GameObject helmet; 
   [SerializeField] private LayerMask playerLayerMask;
   [SerializeField] private BoxCollider[] colliders;
   private bool playerInAttackRange = false;
   private bool attacking = false;
   private bool alive = true;
+  private bool canMove = true;
   private NavMeshAgent agent;
   private Animator animator;
   private LifeAndDeath ladScript;
@@ -46,17 +50,25 @@ public class EnemyAi : MonoBehaviour
     if(alive)
     {
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayerMask); 
-      transform.LookAt(player.transform);
-      if(!playerInAttackRange)
+      // transform.LookAt(player.transform);
+      if(!playerInAttackRange && canMove)
       {
         agent.SetDestination(player.transform.position);
       }
-      else if(!attacking)
+      else if(!attacking && canMove)
       {
         StartCoroutine(Attack());
       }
     }
     animator.SetFloat("Vel", agent.velocity.magnitude);
+  }
+  public void HelmetTakeDamage(int damage)
+  {
+    helmetHP -= damage;
+    if(helmetHP <= 0)
+    {
+      StartCoroutine(HelmetHit());
+    }
   }
   IEnumerator Attack()
   {
@@ -88,6 +100,16 @@ public class EnemyAi : MonoBehaviour
     animator.SetBool("Attacking", false);
     yield return new WaitForSeconds(1.5f);
     attacking = false;
+  }
+  IEnumerator HelmetHit()
+  {
+    canMove = false;
+    HasHelmet = !HasHelmet;
+    animator.Play("HelmetHit");
+    yield return new WaitForSeconds(0.2f);
+    helmet.SetActive(false);
+    yield return new WaitForSeconds(0.2f);
+    canMove = true;
   }
   private void DestroyGameObject()
   {

@@ -1175,6 +1175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackRange: 2
   attackDamage: 5
+  helmetHP: 4
+  helmet: {fileID: 3112021549273667106}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
