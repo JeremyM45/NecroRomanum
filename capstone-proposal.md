@@ -42,5 +42,8 @@
 * Round mechanics
 * Points mechanics
 * Player inventory mechanics
+* Texturing
+* Custom effects
+* Static 3d models
 ### Stretch Goals Tools/Resources
 * No additional Tool/Resources needed
