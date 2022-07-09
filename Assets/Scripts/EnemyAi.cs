@@ -5,16 +5,18 @@ using UnityEngine.AI;
 
 public class EnemyAi : MonoBehaviour
 {
-  [SerializeField] private Transform player;
   [SerializeField] private float attackRange;
   [SerializeField] private int attackDamage;
   [SerializeField] private LayerMask playerLayerMask;
+  [SerializeField] private BoxCollider[] colliders;
   private bool playerInAttackRange = false;
   private bool attacking = false;
   private bool alive = true;
   private NavMeshAgent agent;
   private Animator animator;
   private LifeAndDeath ladScript;
+  private GameObject player;
+  
   private string[] deathAnimations = new string[] {"Death1", "Death2", "Death3"};
   private string deathAnim;
   void Awake()
@@ -22,6 +24,7 @@ public class EnemyAi : MonoBehaviour
     animator = GetComponent<Animator>();
     agent = GetComponent<NavMeshAgent>();
     ladScript = GetComponent<LifeAndDeath>();
+    player = GameObject.Find("Player");
     int rng = (int)Random.Range(0f, deathAnimations.Length);
     deathAnim = deathAnimations[rng];
   }
@@ -34,15 +37,19 @@ public class EnemyAi : MonoBehaviour
       alive = false;
       agent.SetDestination(transform.position);
       animator.Play(deathAnim);
+      foreach(BoxCollider boxCollider in colliders)
+      {
+        boxCollider.isTrigger = true;
+      }
       Invoke("DestroyGameObject", 10f);
     }
     if(alive)
     {
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayerMask); 
-      transform.LookAt(player);
+      transform.LookAt(player.transform);
       if(!playerInAttackRange)
       {
-        agent.SetDestination(player.position);
+        agent.SetDestination(player.transform.position);
       }
       else if(!attacking)
       {
