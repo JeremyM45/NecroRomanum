@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyAi : MonoBehaviour
 {
+  public bool Alive {get; private set;}  = true;
   public bool HasHelmet {get; private set;} = true;
   [SerializeField] private float attackRange;
   [SerializeField] private int attackDamage;
@@ -14,7 +15,7 @@ public class EnemyAi : MonoBehaviour
   [SerializeField] private BoxCollider[] colliders;
   private bool playerInAttackRange = false;
   private bool attacking = false;
-  private bool alive = true;
+  
   private bool canMove = true;
   private NavMeshAgent agent;
   private Animator animator;
@@ -36,9 +37,9 @@ public class EnemyAi : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if(ladScript.GetCurrentHealth() <= 0)
+    if(ladScript.GetCurrentHealth() <= 0 && Alive == true)
     {
-      alive = false;
+      Alive = false;
       agent.SetDestination(transform.position);
       animator.Play(deathAnim);
       foreach(BoxCollider boxCollider in colliders)
@@ -47,7 +48,7 @@ public class EnemyAi : MonoBehaviour
       }
       Invoke("DestroyGameObject", 10f);
     }
-    if(alive)
+    if(Alive)
     {
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayerMask); 
       // transform.LookAt(player.transform);
