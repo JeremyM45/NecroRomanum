@@ -42,23 +42,26 @@ public class Gun : MonoBehaviour
         obj.transform.position += obj.transform.forward / 10;
         LifeAndDeath enemyLad = hit.transform.GetComponentInParent<LifeAndDeath>();
         EnemyAi enemyAi = hit.transform.GetComponentInParent<EnemyAi>();
-        if(hit.transform.name == "Body")
+        if(enemyAi.Alive)
         {
-          appliedDamage = damage;
-        }
-        else if(hit.transform.name == "Head")
-        {
-          if(enemyAi.HasHelmet)
+          if(hit.transform.name == "Body")
           {
-            appliedDamage = damage / 4;
-            enemyAi.HelmetTakeDamage(damage);
+            appliedDamage = damage;
           }
-          else
+          else if(hit.transform.name == "Head")
           {
-            appliedDamage = damage * 3;
+            if(enemyAi.HasHelmet)
+            {
+              appliedDamage = damage / 4;
+              enemyAi.HelmetTakeDamage(damage);
+            }
+            else
+            {
+              appliedDamage = damage * 3;
+            }
           }
+          enemyLad.TakeDamage(appliedDamage);
         }
-        enemyLad.TakeDamage(appliedDamage);
       }
       else if(hit.transform.gameObject.layer != 8)
       {

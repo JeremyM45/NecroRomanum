@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class GlobalSpawnLogic : MonoBehaviour
 {
-  private int newNumOfEnemiesAlive;
-  private int currentNumOfEnemiesAlive;
+  public int NumOfEnemiesAlive {get; private set;}
   private EnemyAi[] enemies;
   private List<EnemyAi> enemiesAlive = new List<EnemyAi>();
   // Start is called before the first frame update
@@ -31,12 +30,8 @@ public class GlobalSpawnLogic : MonoBehaviour
           enemiesAlive.Add(enemy);
         }
       }
-      newNumOfEnemiesAlive = enemiesAlive.Count;
-      if(newNumOfEnemiesAlive != currentNumOfEnemiesAlive)
-      {
-        currentNumOfEnemiesAlive = newNumOfEnemiesAlive;
-        Debug.Log(newNumOfEnemiesAlive);
-      }
+      NumOfEnemiesAlive = enemiesAlive.Count;
+      Debug.Log("Num of Enemies : " + NumOfEnemiesAlive);
     }
   }
 }
