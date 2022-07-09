@@ -29,8 +29,6 @@ public class PlayerController : MonoBehaviour
   // Start is called before the first frame update
   void Awake()
   {
-    // playerAnimator = GetComponentInChildren<Animator>();
-    // playerAnimator.Play("M1911Idle");
     playerController = GetComponent<CharacterController>();
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;

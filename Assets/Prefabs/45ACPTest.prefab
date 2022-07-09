@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8014130660334843013}
   - component: {fileID: 1966959267132223236}
   - component: {fileID: 1418268792749974811}
-  - component: {fileID: -5606922517276584649}
+  - component: {fileID: -3963776287302639754}
   m_Layer: 0
-  m_Name: 45ACP
+  m_Name: 45ACPTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7450969776222286880}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.02, y: 0.02, z: 0.05}
+  m_LocalScale: {x: 0.05, y: 0.04, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &-5606922517276584649
+--- !u!114 &-3963776287302639754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,6 +124,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7450969776222286880}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07cac1bb7d6823048bc8757811211e26, type: 3}
+  m_Script: {fileID: 11500000, guid: 904bdcd4b0589f543a339c2c66c0c4f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 1418268792749974811}
+  explosion: {fileID: 0}
+  whatIsEnemies:
+    serializedVersion: 2
+    m_Bits: 0
+  bounciness: 0
+  useGravity: 0
+  maxLifetime: 10
+  explodeOnTouch: 1
+  explodeOnImpact: 1

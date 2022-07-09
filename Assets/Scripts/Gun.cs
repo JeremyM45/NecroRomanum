@@ -11,9 +11,7 @@ public class Gun : MonoBehaviour
   [SerializeField] private float timeBetweenShots;
   [SerializeField] private float horizontalForce;
   [SerializeField] private float verticalForce;
-  
   private bool readyToShoot = true;
-
   // Update is called once per frame
   void Update()
   {
@@ -25,6 +23,7 @@ public class Gun : MonoBehaviour
   private void Shoot()
   {
     readyToShoot = false;
+
     Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
     RaycastHit hit;
     Vector3 targetPoint;
@@ -37,6 +36,16 @@ public class Gun : MonoBehaviour
       targetPoint = ray.GetPoint(76);
     }
     Vector3 directionWithoutSpread = targetPoint - firePoint.position;
+    // Vector3 adjustedFirePoint = firePoint.position;
+    // Debug.Log(Input.GetAxisRaw("Horizontal"));
+    // if(Input.GetAxisRaw("Horizontal") == 1)
+    // {
+    //   adjustedFirePoint = new Vector3(firePoint.position.x + 1f, firePoint.position.y, firePoint.position.z);
+    // }
+    // else if(Input.GetAxisRaw("Horizontal") == -1)
+    // {
+    //   adjustedFirePoint = new Vector3(firePoint.position.x + 0.5f, firePoint.position.y, firePoint.position.z);
+    // }
     Projectile currentBullet = Instantiate(projectile, firePoint.position, Quaternion.identity) as Projectile;
     Rigidbody currentBulletRb = currentBullet.GetComponent<Rigidbody>();
     currentBullet.transform.forward = directionWithoutSpread.normalized;
