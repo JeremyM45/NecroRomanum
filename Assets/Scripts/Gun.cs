@@ -12,8 +12,10 @@ public class Gun : MonoBehaviour
   [SerializeField] private Camera playerCam;
   [Header("Stats")]
   [SerializeField] private float timeBetweenShots;
+  [SerializeField] private int damage;
   [SerializeField] private float range;
   private bool readyToShoot = true;
+  private int appliedDamage;
   void Start()
   {
     muzzleFlash.SetActive(false);
@@ -37,12 +39,21 @@ public class Gun : MonoBehaviour
       if(hit.transform.gameObject.layer == 9)
       {
         obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
+        obj.transform.position += obj.transform.forward / 10;
+        if(hit.transform.name == "Body")
+        {
+          appliedDamage = damage;
+        }
+        else if(hit.transform.name == "Head")
+        {
+          appliedDamage = damage * 3;
+        }
+        hit.transform.GetComponentInParent<LifeAndDeath>().TakeDamage(appliedDamage);
       }
-      else
+      else if(hit.transform.gameObject.layer != 8)
       {
         obj = Instantiate(bulletDecal, hit.point, Quaternion.LookRotation(hit.normal));
       }
-      obj.transform.position += obj.transform.forward / 10;
     }
     muzzleFlash.SetActive(true);
     StartCoroutine(MuzzleFlash());

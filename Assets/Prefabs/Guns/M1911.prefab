@@ -800,6 +800,7 @@ MonoBehaviour:
   flashEffectTime: 0.05
   playerCam: {fileID: 0}
   timeBetweenShots: 0.3
+  damage: 4
   range: 1000
 --- !u!54 &4564698969589729680
 Rigidbody:

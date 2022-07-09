@@ -1876,37 +1876,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 1.6, z: 0.4}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &453347753
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 453347754}
-  m_Layer: 0
-  m_Name: orientation
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &453347754
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 453347753}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.7186949, y: 1.0714962, z: -0.07104218}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &482323397
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -2028,7 +1997,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &649347238
 GameObject:
@@ -2044,7 +2013,7 @@ GameObject:
   - component: {fileID: 649347241}
   - component: {fileID: 649347240}
   - component: {fileID: 649347239}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: PolyShape
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2389,9 +2358,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1888394705458330630}
   attackRange: 2
+  attackDamage: 5
   playerLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
 --- !u!95 &745786824
 Animator:
   serializedVersion: 4
@@ -2418,7 +2388,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh24118
+  m_Name: pb_Mesh24120
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3059,6 +3029,7 @@ GameObject:
   - component: {fileID: 745786824}
   - component: {fileID: 745786823}
   - component: {fileID: 919132148693135509}
+  - component: {fileID: 919132148693135510}
   m_Layer: 9
   m_Name: Hestati
   m_TagString: Untagged
@@ -3080,7 +3051,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 2
+  m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -3088,6 +3059,20 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &919132148693135510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132148693135508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e0b76e9044924e4db69a09c3391fecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  currentHealth: 0
 --- !u!137 &938378453084673830
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -3667,6 +3652,7 @@ GameObject:
   - component: {fileID: 1888394705458330629}
   - component: {fileID: 1888394705458330651}
   - component: {fileID: 1888394705458330628}
+  - component: {fileID: 1888394705458330652}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -3721,7 +3707,7 @@ Transform:
   m_Children:
   - {fileID: 1888394706382179849}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1888394705458330631
 CharacterController:
@@ -3757,6 +3743,20 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 3
+--- !u!114 &1888394705458330652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888394705458330624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e0b76e9044924e4db69a09c3391fecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 50
+  currentHealth: 0
 --- !u!4 &1888394706196703438
 Transform:
   m_ObjectHideFlags: 0
@@ -6413,7 +6413,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1276928233634149355}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
