@@ -34,7 +34,6 @@ public class Gun : MonoBehaviour
     RaycastHit hit;
     if(Physics.Raycast(ray, out hit, range))
     {
-      Debug.Log(hit.transform.name);
       GameObject obj;
       if(hit.transform.gameObject.layer == 9)
       {

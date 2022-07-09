@@ -21,11 +21,13 @@ public class EnemyAi : MonoBehaviour
   private Animator animator;
   private LifeAndDeath ladScript;
   private GameObject player;
+  private GlobalSpawnLogic globalSpawnLogic;
   
   private string[] deathAnimations = new string[] {"Death1", "Death2", "Death3"};
   private string deathAnim;
   void Awake()
   {
+    globalSpawnLogic = GameObject.Find("GlobalSpawnLogic").GetComponent<GlobalSpawnLogic>();
     animator = GetComponent<Animator>();
     agent = GetComponent<NavMeshAgent>();
     ladScript = GetComponent<LifeAndDeath>();
@@ -40,6 +42,7 @@ public class EnemyAi : MonoBehaviour
     if(ladScript.GetCurrentHealth() <= 0 && Alive == true)
     {
       Alive = false;
+      globalSpawnLogic.EnemiesLeftCalc(1);
       agent.SetDestination(transform.position);
       animator.Play(deathAnim);
       foreach(BoxCollider boxCollider in colliders)
@@ -84,19 +87,11 @@ public class EnemyAi : MonoBehaviour
       attacking = false;
       yield break;
     }
-    else
-    {
-      Debug.Log("No Hit");
-    }
     yield return new WaitForSeconds(0.5f);
     if(Physics.CheckSphere(transform.position, attackRange, playerLayerMask))
     {
       player.GetComponent<LifeAndDeath>().TakeDamage(attackDamage);
       animator.SetBool("Attacking", false);
-    }
-    else
-    {
-      Debug.Log("No Hit 2");
     }
     animator.SetBool("Attacking", false);
     yield return new WaitForSeconds(1.5f);

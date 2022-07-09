@@ -17,7 +17,6 @@ public class LifeAndDeath : MonoBehaviour
     {
       currentHealth = 0;
     }
-    Debug.Log("Health: " + currentHealth + " / " + maxHealth);
   }
   public int GetCurrentHealth()
   {
