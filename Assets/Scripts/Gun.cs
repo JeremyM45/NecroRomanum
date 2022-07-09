@@ -9,8 +9,6 @@ public class Gun : MonoBehaviour
   [SerializeField] private GameObject enemyHitDecal;
   [SerializeField] private GameObject muzzleFlash;
   [SerializeField] private float flashEffectTime = 0.05f;
-  // [SerializeField] private Transform firePoint;
-  // [SerializeField] private Projectile projectile;
   [SerializeField] private Camera playerCam;
   [Header("Stats")]
   [SerializeField] private float timeBetweenShots;
@@ -35,15 +33,16 @@ public class Gun : MonoBehaviour
     if(Physics.Raycast(ray, out hit, range))
     {
       Debug.Log(hit.transform.name);
+      GameObject obj;
       if(hit.transform.gameObject.layer == 9)
       {
-        GameObject obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
+        obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
       }
       else
       {
-        GameObject obj = Instantiate(bulletDecal, hit.point, Quaternion.LookRotation(hit.normal));
+        obj = Instantiate(bulletDecal, hit.point, Quaternion.LookRotation(hit.normal));
       }
-      // obj.transform.position += obj.transform.forward / 1000;
+      obj.transform.position += obj.transform.forward / 10;
     }
     muzzleFlash.SetActive(true);
     StartCoroutine(MuzzleFlash());
