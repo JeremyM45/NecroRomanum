@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+  [SerializeField] private GameObject muzzleFlash;
+  [SerializeField] private float flashEffectTime = 0.05f;
   [SerializeField] private Transform firePoint;
   [SerializeField] private Projectile projectile;
   [SerializeField] private Camera playerCam;
@@ -12,7 +14,10 @@ public class Gun : MonoBehaviour
   [SerializeField] private float horizontalForce;
   [SerializeField] private float verticalForce;
   private bool readyToShoot = true;
-  // Update is called once per frame
+  void Start()
+  {
+    muzzleFlash.SetActive(false);
+  }
   void Update()
   {
     if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot)
@@ -23,7 +28,6 @@ public class Gun : MonoBehaviour
   private void Shoot()
   {
     readyToShoot = false;
-
     Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
     RaycastHit hit;
     Vector3 targetPoint;
@@ -35,26 +39,24 @@ public class Gun : MonoBehaviour
     {
       targetPoint = ray.GetPoint(76);
     }
+    muzzleFlash.SetActive(true);
+    StartCoroutine(MuzzleFlash());
     Vector3 directionWithoutSpread = targetPoint - firePoint.position;
-    // Vector3 adjustedFirePoint = firePoint.position;
-    // Debug.Log(Input.GetAxisRaw("Horizontal"));
-    // if(Input.GetAxisRaw("Horizontal") == 1)
-    // {
-    //   adjustedFirePoint = new Vector3(firePoint.position.x + 1f, firePoint.position.y, firePoint.position.z);
-    // }
-    // else if(Input.GetAxisRaw("Horizontal") == -1)
-    // {
-    //   adjustedFirePoint = new Vector3(firePoint.position.x + 0.5f, firePoint.position.y, firePoint.position.z);
-    // }
     Projectile currentBullet = Instantiate(projectile, firePoint.position, Quaternion.identity) as Projectile;
     Rigidbody currentBulletRb = currentBullet.GetComponent<Rigidbody>();
     currentBullet.transform.forward = directionWithoutSpread.normalized;
     currentBulletRb.AddForce(directionWithoutSpread.normalized * horizontalForce, ForceMode.Impulse);
     currentBulletRb.AddForce(playerCam.transform.up * verticalForce, ForceMode.Impulse);
-    Invoke("ResetShot", timeBetweenShots);
+    StartCoroutine(ResetShot());
   }
-  private void ResetShot()
+  IEnumerator MuzzleFlash()
   {
+    yield return new WaitForSeconds(flashEffectTime);
+    muzzleFlash.SetActive(false);
+  }
+  IEnumerator ResetShot()
+  {
+    yield return new WaitForSeconds(timeBetweenShots);
     readyToShoot = true;
   }
 }
