@@ -66,10 +66,12 @@ public class Gun : MonoBehaviour
         {
           if(hit.transform.name == "Body")
           {
+            enemyAi.Headshot = false;
             appliedDamage = damage;
           }
           else if(hit.transform.name == "Head")
           {
+            enemyAi.Headshot = true;
             if(enemyAi.HasHelmet)
             {
               appliedDamage = damage / 4;

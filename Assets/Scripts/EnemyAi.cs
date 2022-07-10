@@ -7,6 +7,7 @@ public class EnemyAi : MonoBehaviour
 {
   public bool Alive {get; private set;}  = true;
   public bool HasHelmet {get; private set;} = true;
+  public bool Headshot {get; set;} = false;
   [SerializeField] private float attackRange;
   [SerializeField] private int attackDamage;
   [SerializeField] private int helmetHP;
@@ -42,6 +43,14 @@ public class EnemyAi : MonoBehaviour
     if(ladScript.GetCurrentHealth() <= 0 && Alive == true)
     {
       Alive = false;
+      if(Headshot)
+      {
+        player.GetComponent<Score>().AddPoints(10);
+      }
+      else
+      {
+        player.GetComponent<Score>().AddPoints(5);
+      }
       globalSpawnLogic.EnemiesLeftCalc(1);
       agent.SetDestination(transform.position);
       animator.Play(deathAnim);
