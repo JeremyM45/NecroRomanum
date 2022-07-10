@@ -799,7 +799,11 @@ MonoBehaviour:
   muzzleFlash: {fileID: 206406256657130927}
   flashEffectTime: 0.05
   playerCam: {fileID: 0}
+  ammoCounter: {fileID: 0}
   timeBetweenShots: 0.3
+  maxRoundsPerMag: 8
+  reloadTime: 2
+  totalAmmo: 60
   damage: 4
   range: 1000
 --- !u!54 &4564698969589729680

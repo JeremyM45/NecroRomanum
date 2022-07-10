@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using TMPro;
 public class GlobalSpawnLogic : MonoBehaviour
 {
   public int NumOfEnemiesLeft {get; private set;}
@@ -9,6 +9,8 @@ public class GlobalSpawnLogic : MonoBehaviour
   public bool NewRoundCooldown {get; private set;}
   public int Round {get; private set;}
   [SerializeField] private float newRoundSpawnerCooldown;
+  [SerializeField] private TextMeshProUGUI roundDisplay;
+  [SerializeField] private TextMeshProUGUI enemyCounterDisplay;
   private EnemyAi[] enemies;
   private List<EnemyAi> enemiesAlive = new List<EnemyAi>();
   
@@ -22,7 +24,7 @@ public class GlobalSpawnLogic : MonoBehaviour
   public void EnemiesLeftCalc(int deathAmount)
   {
     NumOfEnemiesLeft -= deathAmount;
-    Debug.Log("Enemies: " + NumOfEnemiesLeft);
+    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
   }
   public void RoundSettings()
   {
@@ -52,11 +54,11 @@ public class GlobalSpawnLogic : MonoBehaviour
   private void NewRound()
   {
     Round++;
-    Debug.Log("Round: " + Round);
+    roundDisplay.SetText(Round.ToString());
     NewRoundCooldown = true;
     RoundSettings();
     NumOfEnemiesLeft = NumOfEnemiesToSpawn;
-    Debug.Log("Enemies: " + NumOfEnemiesLeft);
+    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
     Invoke("NewRoundCooldownReset", newRoundSpawnerCooldown);
   }
   private void NewRoundCooldownReset()

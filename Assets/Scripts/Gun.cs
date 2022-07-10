@@ -2,6 +2,7 @@ using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Gun : MonoBehaviour
 {
@@ -10,26 +11,46 @@ public class Gun : MonoBehaviour
   [SerializeField] private GameObject muzzleFlash;
   [SerializeField] private float flashEffectTime = 0.05f;
   [SerializeField] private Camera playerCam;
+  [SerializeField] private TextMeshProUGUI ammoCounter;
   [Header("Stats")]
   [SerializeField] private float timeBetweenShots;
+  [SerializeField] private int maxRoundsPerMag;
+  [SerializeField] private float reloadTime;
+  [SerializeField] private int totalAmmo;
   [SerializeField] private int damage;
   [SerializeField] private float range;
   private bool readyToShoot = true;
+  private bool shooting = false;
+  private bool reloading = false;
   private int appliedDamage;
+  private int currentRoundsInMag;
   void Start()
   {
     muzzleFlash.SetActive(false);
+    currentRoundsInMag = maxRoundsPerMag;
+    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
   }
   void Update()
   {
-    if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot)
+    if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !reloading && currentRoundsInMag > 0)
     {
       Shoot();
+    }
+    else if(Input.GetKeyDown(KeyCode.R) && !shooting && !reloading && currentRoundsInMag != maxRoundsPerMag)
+    {
+      StartCoroutine(Reload());
+    }
+    else if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !reloading && currentRoundsInMag <= 0)
+    {
+      StartCoroutine(Reload());
     }
   }
   private void Shoot()
   {
     readyToShoot = false;
+    shooting = true;
+    currentRoundsInMag--;
+    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
     Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
     RaycastHit hit;
     if(Physics.Raycast(ray, out hit, range))
@@ -69,7 +90,28 @@ public class Gun : MonoBehaviour
     }
     muzzleFlash.SetActive(true);
     StartCoroutine(MuzzleFlash());
+    shooting = false;
     StartCoroutine(ResetShot());
+  }
+  IEnumerator Reload()
+  {
+    readyToShoot = false;
+    reloading = true;
+    yield return new WaitForSeconds(reloadTime);
+    int roundsToReplace = maxRoundsPerMag - currentRoundsInMag;
+    if(roundsToReplace > totalAmmo)
+    {
+      currentRoundsInMag = totalAmmo;
+      totalAmmo = 0;
+    }
+    else
+    { 
+      currentRoundsInMag = maxRoundsPerMag;
+      totalAmmo -= roundsToReplace;
+    }
+    reloading = false;
+    readyToShoot = true;
+    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
   }
   IEnumerator MuzzleFlash()
   {
