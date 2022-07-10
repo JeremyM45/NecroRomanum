@@ -16,7 +16,7 @@ public class Gun : MonoBehaviour
   [SerializeField] private float timeBetweenShots;
   [SerializeField] private int maxRoundsPerMag;
   [SerializeField] private float reloadTime;
-  [SerializeField] private int totalAmmo;
+  [SerializeField] private int maxTotalAmmo;
   [SerializeField] private int damage;
   [SerializeField] private float range;
   private bool readyToShoot = true;
@@ -24,14 +24,16 @@ public class Gun : MonoBehaviour
   private bool reloading = false;
   private int appliedDamage;
   private int currentRoundsInMag;
+  private int totalAmmo;
   void Start()
   {
     muzzleFlash.SetActive(false);
     currentRoundsInMag = maxRoundsPerMag;
-    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
+    totalAmmo = maxTotalAmmo;
   }
   void Update()
   {
+    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
     if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !reloading && currentRoundsInMag > 0)
     {
       Shoot();
@@ -50,7 +52,6 @@ public class Gun : MonoBehaviour
     readyToShoot = false;
     shooting = true;
     currentRoundsInMag--;
-    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
     Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
     RaycastHit hit;
     if(Physics.Raycast(ray, out hit, range))
@@ -95,6 +96,11 @@ public class Gun : MonoBehaviour
     shooting = false;
     StartCoroutine(ResetShot());
   }
+  public void FillAmmo()
+  {
+    currentRoundsInMag = maxRoundsPerMag;
+    totalAmmo = maxTotalAmmo;
+  }
   IEnumerator Reload()
   {
     readyToShoot = false;
@@ -113,7 +119,6 @@ public class Gun : MonoBehaviour
     }
     reloading = false;
     readyToShoot = true;
-    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
   }
   IEnumerator MuzzleFlash()
   {

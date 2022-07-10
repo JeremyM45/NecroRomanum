@@ -2113,6 +2113,7 @@ GameObject:
   - component: {fileID: 9144178587824800237}
   - component: {fileID: 9144178587824800242}
   - component: {fileID: 9144178587824800234}
+  - component: {fileID: 815387671}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -2217,6 +2218,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 50
   currentHealth: 0
+--- !u!114 &815387671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9144178587824800246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1da60de216d78d846989c2c285f40884, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreDisplay: {fileID: 0}
 --- !u!1 &9144178588240201907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2346,6 +2360,10 @@ PrefabInstance:
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 9144178588295519709}
+    - target: {fileID: 8323714091129071893, guid: 22069b7e3062d8140af3ddd750339542, type: 3}
+      propertyPath: maxTotalAmmo
+      value: 90
+      objectReference: {fileID: 0}
     - target: {fileID: 8361351210146729721, guid: 22069b7e3062d8140af3ddd750339542, type: 3}
       propertyPath: m_RootOrder
       value: 0

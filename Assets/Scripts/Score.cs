@@ -5,23 +5,23 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
+  public int CurrentScore {get; private set;}
   [SerializeField] private TextMeshProUGUI scoreDisplay;
-  private int currentScore;
   // Start is called before the first frame update
   void Start()
   {
-    currentScore = 0;
+    CurrentScore = 0;
   }
   void Update()
   {
-    scoreDisplay.SetText(currentScore.ToString());
+    scoreDisplay.SetText(CurrentScore.ToString());
   }
   public void AddPoints(int pointsToAdd)
   {
-    currentScore += pointsToAdd;
+    CurrentScore += pointsToAdd;
   }
   public void removePoints(int pointsToRemove)
   {
-    currentScore -= pointsToRemove;
+    CurrentScore -= pointsToRemove;
   }
 }
