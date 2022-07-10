@@ -42,7 +42,9 @@ public class EnemyAi : MonoBehaviour
   {
     if(ladScript.GetCurrentHealth() <= 0 && Alive == true)
     {
+      agent.SetDestination(transform.position);
       Alive = false;
+      agent.enabled = false;
       if(Headshot)
       {
         player.GetComponent<Score>().AddPoints(10);
@@ -52,7 +54,6 @@ public class EnemyAi : MonoBehaviour
         player.GetComponent<Score>().AddPoints(5);
       }
       globalSpawnLogic.EnemiesLeftCalc(1);
-      agent.SetDestination(transform.position);
       animator.Play(deathAnim);
       foreach(BoxCollider boxCollider in colliders)
       {
@@ -63,7 +64,8 @@ public class EnemyAi : MonoBehaviour
     if(Alive)
     {
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayerMask); 
-      // transform.LookAt(player.transform);
+      transform.LookAt(player.transform);
+      transform.eulerAngles = new Vector3 (transform.eulerAngles.x, transform.eulerAngles.y, 0);
       if(!playerInAttackRange && canMove)
       {
         agent.SetDestination(player.transform.position);
