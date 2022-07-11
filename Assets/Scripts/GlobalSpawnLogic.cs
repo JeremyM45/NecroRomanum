@@ -7,7 +7,7 @@ public class GlobalSpawnLogic : MonoBehaviour
   public int NumOfEnemiesLeft {get; private set;}
   public int NumOfEnemiesToSpawn {get; set;}
   public bool NewRoundCooldown {get; private set;}
-  public int Round {get; private set;}
+  public int Round;
   [SerializeField] private float newRoundSpawnerCooldown;
   [SerializeField] private TextMeshProUGUI roundDisplay;
   [SerializeField] private TextMeshProUGUI enemyCounterDisplay;
@@ -20,6 +20,7 @@ public class GlobalSpawnLogic : MonoBehaviour
     StartCoroutine(RoundCheck());
     NewRoundCooldown = true;
     NumOfEnemiesLeft = 0;
+    roundDisplay.SetText("I");
   }
   public void EnemiesLeftCalc(int deathAmount)
   {
@@ -54,7 +55,8 @@ public class GlobalSpawnLogic : MonoBehaviour
   private void NewRound()
   {
     Round++;
-    roundDisplay.SetText(Round.ToString());
+    string roundNum = IntToRoman(Round);
+    roundDisplay.SetText(roundNum);
     NewRoundCooldown = true;
     RoundSettings();
     NumOfEnemiesLeft = NumOfEnemiesToSpawn;
@@ -75,18 +77,69 @@ public class GlobalSpawnLogic : MonoBehaviour
       {
         NewRound();
       }
-      // Debug.Log("Ran Check");
-      // enemiesAlive.Clear();
-      // enemies = FindObjectsOfType<EnemyAi>();
-      // foreach(EnemyAi enemy in enemies)
-      // {
-      //   if(enemy.Alive)
-      //   {
-      //     enemiesAlive.Add(enemy);
-      //   }
-      // }
-      // NumOfEnemiesAlive = enemiesAlive.Count;
-      // Debug.Log("Num of Enemies : " + NumOfEnemiesAlive);
     }
+  }
+  public string IntToRoman(int num) 
+  {
+    string result = "";
+    while (num >= 1000) {
+      result += "M";
+      num -= 1000;            
+    }
+    while (num >= 100) {
+      if (num >= 900) {           
+        result += "CM";
+        num -= 900;              
+      }
+      if (num >= 400 && num < 500) {               
+        result += "CD";
+        num -= 400;                
+      }
+      if (num >= 500) {                
+        result += "D";
+        num -= 500;              
+      }   
+      if (num >= 100) {                
+        result += "C";
+        num -= 100;           
+      }
+    }
+    while (num >= 10) {
+      if (num >= 90) {            
+        result += "XC";
+        num -= 90;                
+      }
+      if (num >= 40 && num < 50) {                
+        result += "XL";
+        num -= 40;                
+      }
+      if (num >= 50) {
+        result += "L";
+        num -= 50;
+      }
+      if (num >= 10) {
+        result += "X";
+        num -= 10;
+      }         
+    }
+    while (num >= 1) {
+      if (num == 9) {
+        result += "IX";
+        num -= 9;
+      }
+      if (num == 4) {
+        result += "IV";
+        num -= 4;
+      }
+      if (num >= 5) {                
+        result += "V";
+        num -= 5;                
+      }
+      if (num >= 1) {                
+        result += "I";
+        num -= 1;
+      }
+    }        
+    return result;       
   }
 }

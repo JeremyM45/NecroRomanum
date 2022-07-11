@@ -1705,6 +1705,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8749399542333758354}
   - component: {fileID: 3426166551772463592}
+  - component: {fileID: 2067817460}
   m_Layer: 8
   m_Name: Hands
   m_TagString: Untagged
@@ -1749,6 +1750,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2067817460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8225767732096041256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8125b5928d984564ca11145e0b578daf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  swayAmount: 0.04
+  swaySmoothAmount: 8
+  maxSwayAmount: 0.08
+  rotationAmount: 4
+  rotationSmoothAmount: 12
+  maxRotationAmount: 10
+  rotationX: 1
+  rotationY: 1
+  rotationZ: 1
 --- !u!1 &8313670832181601677
 GameObject:
   m_ObjectHideFlags: 0
