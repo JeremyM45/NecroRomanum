@@ -1183,6 +1183,10 @@ MonoBehaviour:
   colliders:
   - {fileID: 5193521930645366266}
   - {fileID: 5193521929882655431}
+  baseKillScore: 5
+  headshotKillScore: 10
+  baseKillHPRegen: 5
+  headshotKillHPRegen: 10
 --- !u!195 &4959150917677417177
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1219,6 +1223,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   currentHealth: 0
+  maxRegenAmount: 0
+  timeBetweenRegenIncrements: 0
+  timeBeforeRegenStarts: 0
+  canAutoRegenHp: 0
+  autoRegenAmount: 0
+  autoRegenIncrement: 0
 --- !u!1 &4973664623165732840
 GameObject:
   m_ObjectHideFlags: 0

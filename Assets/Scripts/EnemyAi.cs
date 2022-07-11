@@ -14,6 +14,11 @@ public class EnemyAi : MonoBehaviour
   [SerializeField] private GameObject helmet; 
   [SerializeField] private LayerMask playerLayerMask;
   [SerializeField] private BoxCollider[] colliders;
+  [Header("On Kill")]
+  [SerializeField] private int baseKillScore;
+  [SerializeField] private int headshotKillScore;
+  [SerializeField] private int baseKillHPRegen;
+  [SerializeField] private int headshotKillHPRegen;
   private bool playerInAttackRange = false;
   private bool attacking = false;
   
@@ -42,24 +47,7 @@ public class EnemyAi : MonoBehaviour
   {
     if(ladScript.GetCurrentHealth() <= 0 && Alive == true)
     {
-      agent.SetDestination(transform.position);
-      Alive = false;
-      agent.enabled = false;
-      if(Headshot)
-      {
-        player.GetComponent<Score>().AddPoints(10);
-      }
-      else
-      {
-        player.GetComponent<Score>().AddPoints(5);
-      }
-      globalSpawnLogic.EnemiesLeftCalc(1);
-      animator.Play(deathAnim);
-      foreach(BoxCollider boxCollider in colliders)
-      {
-        boxCollider.isTrigger = true;
-      }
-      Invoke("DestroyGameObject", 10f);
+      Death();
     }
     if(Alive)
     {
@@ -84,6 +72,32 @@ public class EnemyAi : MonoBehaviour
     {
       StartCoroutine(HelmetHit());
     }
+  }
+  private void Death()
+  {
+    agent.SetDestination(transform.position);
+      Alive = false;
+      agent.enabled = false;
+      if(Headshot)
+      {
+        player.GetComponent<Score>().AddPoints(headshotKillScore);
+        int killRegenIncrement = headshotKillHPRegen / 5;
+        player.GetComponent<LifeAndDeath>().RegenerateHealth(headshotKillHPRegen, killRegenIncrement);
+      }
+      else
+      {
+        player.GetComponent<Score>().AddPoints(baseKillScore);
+        int killRegenIncrement = baseKillHPRegen / 5;
+        player.GetComponent<LifeAndDeath>().RegenerateHealth(baseKillHPRegen, killRegenIncrement);
+      }
+      
+      globalSpawnLogic.EnemiesLeftCalc(1);
+      animator.Play(deathAnim);
+      foreach(BoxCollider boxCollider in colliders)
+      {
+        boxCollider.isTrigger = true;
+      }
+      Invoke("DestroyGameObject", 10f);
   }
   IEnumerator Attack()
   {
