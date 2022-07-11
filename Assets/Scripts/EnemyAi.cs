@@ -65,7 +65,7 @@ public class EnemyAi : MonoBehaviour
     {
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayerMask); 
       transform.LookAt(player.transform);
-      transform.eulerAngles = new Vector3 (transform.eulerAngles.x, transform.eulerAngles.y, 0);
+      transform.eulerAngles = new Vector3 (0, transform.eulerAngles.y, 0);
       if(!playerInAttackRange && canMove)
       {
         agent.SetDestination(player.transform.position);
