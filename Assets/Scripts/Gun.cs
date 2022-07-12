@@ -23,6 +23,7 @@ public class Gun : MonoBehaviour
   [SerializeField] private float accuracySpread;
   [SerializeField] private bool isShotgun;
   [SerializeField] private int pelletsInShell;
+  private List<Vector3> decalPos = new List<Vector3>();
   private bool readyToShoot = true;
   private bool shooting = false;
   private int pelletsFired;
@@ -66,8 +67,11 @@ public class Gun : MonoBehaviour
       GameObject obj;
       if(hit.transform.gameObject.layer == 9)
       {
-        obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
-        obj.transform.position += obj.transform.forward / 10;
+        if(!CheckIfCloseDecal(hit.point))
+        {
+          obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
+          obj.transform.position += obj.transform.forward / 10;
+        }
         LifeAndDeath enemyLad = hit.transform.GetComponentInParent<LifeAndDeath>();
         EnemyAi enemyAi = hit.transform.GetComponentInParent<EnemyAi>();
         if(enemyAi.Alive)
@@ -93,13 +97,12 @@ public class Gun : MonoBehaviour
           enemyLad.TakeDamage(appliedDamage);
         }
       }
-      else if(hit.transform.gameObject.layer != 8)
+      else if(hit.transform.gameObject.layer != 8 && !CheckIfCloseDecal(hit.point))
       {
         obj = Instantiate(bulletDecal, hit.point, Quaternion.LookRotation(hit.normal));
       }
     }
     muzzleFlash.SetActive(true);
-    StartCoroutine(MuzzleFlash());
     if(isShotgun && pelletsFired < pelletsInShell)
     {
       pelletsFired++;
@@ -110,13 +113,36 @@ public class Gun : MonoBehaviour
     {
       pelletsFired = 0;
       shooting = false;
+      StartCoroutine(MuzzleFlash());
       StartCoroutine(ResetShot());
+      decalPos.Clear();
     }
   }
   public void FillAmmo()
   {
     currentRoundsInMag = maxRoundsPerMag;
     totalAmmo = maxTotalAmmo;
+  }
+  private bool CheckIfCloseDecal(Vector3 currentHitPoint)
+  {
+    if(decalPos.Count > 1)
+    {
+      foreach(Vector3 hitPoint in decalPos)
+      {
+        if(Vector3.Distance(hitPoint, currentHitPoint) < 0.1f)
+        {
+          return true;
+        }
+      }
+      decalPos.Add(currentHitPoint);
+      return false;
+    }
+    else
+    {
+      decalPos.Add(currentHitPoint);
+      return false;
+    }
+    
   }
   public void ReloadGun()
   {
