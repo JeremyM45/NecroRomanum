@@ -13,6 +13,7 @@ public class AmmoBox : MonoBehaviour
   private Score playerScore;
   private Gun playerGun;
   private bool playerInRange;
+  private bool playerStillInRange = false;
   void Start()
   {
     player = GameObject.Find("Player");
@@ -21,13 +22,15 @@ public class AmmoBox : MonoBehaviour
   void Update()
   {
     playerInRange = Physics.CheckSphere(transform.position, range, playerLayerMask);
-    if(!playerInRange)
+    if(!playerInRange && playerStillInRange)
     {
       textDisplay.SetText("");
+      playerStillInRange = false;
     }
-    if(playerInRange)
+    if(playerInRange && !playerStillInRange)
     {
       textDisplay.SetText("Press 'E' To Fill Ammo for " + cost + " points");
+      playerStillInRange = true;
       if(Input.GetKeyDown(KeyCode.E) && playerScore.CurrentScore >= cost)
       {
         player.GetComponentInChildren<Gun>().FillAmmo();
