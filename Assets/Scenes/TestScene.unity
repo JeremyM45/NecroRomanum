@@ -5660,15 +5660,15 @@ MonoBehaviour:
   flashEffectTime: 0.08
   playerCam: {fileID: 7264949417354313208}
   ammoCounter: {fileID: 563321922}
-  timeBetweenShots: 0.4
-  maxRoundsPerMag: 8
-  reloadTime: 1.5
+  timeBetweenShots: 0.2
+  maxRoundsPerMag: 2
+  reloadTime: 1
   maxTotalAmmo: 90
-  damage: 10
+  damage: 1
   range: 1000
   accuracySpread: 50
-  isShotgun: 0
-  pelletsInShell: 0
+  isShotgun: 1
+  pelletsInShell: 24
 --- !u!95 &1620642500
 Animator:
   serializedVersion: 4

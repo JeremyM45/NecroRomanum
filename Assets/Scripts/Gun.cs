@@ -22,9 +22,10 @@ public class Gun : MonoBehaviour
   [SerializeField] private float range;
   [SerializeField] private float accuracySpread;
   [SerializeField] private bool isShotgun;
-  [SerializeField] private bool pelletsInShell;
+  [SerializeField] private int pelletsInShell;
   private bool readyToShoot = true;
   private bool shooting = false;
+  private int pelletsFired;
   private int appliedDamage;
   private int currentRoundsInMag;
   private int totalAmmo;
@@ -99,8 +100,18 @@ public class Gun : MonoBehaviour
     }
     muzzleFlash.SetActive(true);
     StartCoroutine(MuzzleFlash());
-    shooting = false;
-    StartCoroutine(ResetShot());
+    if(isShotgun && pelletsFired < pelletsInShell)
+    {
+      pelletsFired++;
+      currentRoundsInMag++;
+      Shoot();
+    }
+    else
+    {
+      pelletsFired = 0;
+      shooting = false;
+      StartCoroutine(ResetShot());
+    }
   }
   public void FillAmmo()
   {
