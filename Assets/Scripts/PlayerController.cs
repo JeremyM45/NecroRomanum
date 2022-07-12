@@ -20,7 +20,6 @@ public class PlayerController : MonoBehaviour
   [SerializeField] private float gravity = 30f;
 
   [SerializeField] private Transform arms;
-  private Animator playerAnimator;
   private CharacterController playerController;
   private Vector3 moveDirection;
   private Vector2 currentInput;
@@ -32,7 +31,6 @@ public class PlayerController : MonoBehaviour
     playerController = GetComponent<CharacterController>();
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
-
   }
 
   // Update is called once per frame
@@ -42,7 +40,6 @@ public class PlayerController : MonoBehaviour
     {
       HandleMovement();
       HandleLook();
-      
       if(ShouldJump)
       {
         HandleJump();

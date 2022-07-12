@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 510d92283cd06f540ad50cbeb4d6eb83
+guid: 31d83ac5897183f4dbf174d56fbb699a
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: -6144651836179901654
-    second: PlayerFPS|M1911Idle
+      74: 8937978760241440739
+    second: PlayerFPS|M1GarandIdle.4
   externalObjects: {}
   materials:
-    materialImportMode: 0
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -36,8 +36,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: PlayerFPS|M1911Idle
-      takeName: PlayerFPS|M1911Idle
+      name: PlayerFPS|M1GarandIdle.4
+      takeName: PlayerFPS|M1GarandIdle.4
       internalID: 0
       firstFrame: 0
       lastFrame: 24

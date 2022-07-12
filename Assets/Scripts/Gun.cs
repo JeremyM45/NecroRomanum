@@ -6,6 +6,7 @@ using TMPro;
 
 public class Gun : MonoBehaviour
 {
+  public bool Reloading {get; set;} = false;
   [SerializeField] private GameObject bulletDecal;
   [SerializeField] private GameObject enemyHitDecal;
   [SerializeField] private GameObject muzzleFlash;
@@ -19,9 +20,11 @@ public class Gun : MonoBehaviour
   [SerializeField] private int maxTotalAmmo;
   [SerializeField] private int damage;
   [SerializeField] private float range;
+  [SerializeField] private float accuracySpread;
+  [SerializeField] private bool isShotgun;
+  [SerializeField] private bool pelletsInShell;
   private bool readyToShoot = true;
   private bool shooting = false;
-  private bool reloading = false;
   private int appliedDamage;
   private int currentRoundsInMag;
   private int totalAmmo;
@@ -34,15 +37,15 @@ public class Gun : MonoBehaviour
   void Update()
   {
     ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
-    if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !reloading && currentRoundsInMag > 0)
+    if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag > 0)
     {
       Shoot();
     }
-    else if(Input.GetKeyDown(KeyCode.R) && !shooting && !reloading && currentRoundsInMag != maxRoundsPerMag)
+    else if(Input.GetKeyDown(KeyCode.R) && !shooting && !Reloading && currentRoundsInMag != maxRoundsPerMag)
     {
       StartCoroutine(Reload());
     }
-    else if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !reloading && currentRoundsInMag <= 0)
+    else if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag <= 0)
     {
       StartCoroutine(Reload());
     }
@@ -52,9 +55,12 @@ public class Gun : MonoBehaviour
     readyToShoot = false;
     shooting = true;
     currentRoundsInMag--;
-    Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+    float spread = accuracySpread / 1000;
+    float spreadX = Random.Range(0.5f - spread, 0.5f + spread); 
+    float spreadY = Random.Range(0.5f - spread, 0.5f + spread); 
+    Ray shootPoint = playerCam.ViewportPointToRay(new Vector3(spreadX, spreadY, 0f));
     RaycastHit hit;
-    if(Physics.Raycast(ray, out hit, range))
+    if(Physics.Raycast(shootPoint, out hit, range))
     {
       GameObject obj;
       if(hit.transform.gameObject.layer == 9)
@@ -101,11 +107,8 @@ public class Gun : MonoBehaviour
     currentRoundsInMag = maxRoundsPerMag;
     totalAmmo = maxTotalAmmo;
   }
-  IEnumerator Reload()
+  public void ReloadGun()
   {
-    readyToShoot = false;
-    reloading = true;
-    yield return new WaitForSeconds(reloadTime);
     int roundsToReplace = maxRoundsPerMag - currentRoundsInMag;
     if(roundsToReplace > totalAmmo)
     {
@@ -117,15 +120,24 @@ public class Gun : MonoBehaviour
       currentRoundsInMag = maxRoundsPerMag;
       totalAmmo -= roundsToReplace;
     }
-    reloading = false;
+    readyToShoot = true;
+    Reloading = false;
+  }
+  private IEnumerator Reload()
+  {
+    readyToShoot = false;
+    Reloading = true;
+    yield return new WaitForSeconds(reloadTime);
+    ReloadGun();
+    Reloading = false;
     readyToShoot = true;
   }
-  IEnumerator MuzzleFlash()
+  private IEnumerator MuzzleFlash()
   {
     yield return new WaitForSeconds(flashEffectTime);
     muzzleFlash.SetActive(false);
   }
-  IEnumerator ResetShot()
+  private IEnumerator ResetShot()
   {
     yield return new WaitForSeconds(timeBetweenShots);
     readyToShoot = true;
