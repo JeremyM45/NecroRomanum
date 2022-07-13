@@ -1173,9 +1173,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77012b99946ef74bbc985a195800c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRange: 2
-  attackDamage: 5
-  helmetHP: 4
   helmet: {fileID: 3112021549273667106}
   playerLayerMask:
     serializedVersion: 2
@@ -1183,6 +1180,11 @@ MonoBehaviour:
   colliders:
   - {fileID: 5193521930645366266}
   - {fileID: 5193521929882655431}
+  helmetHP: 4
+  attackRange: 2
+  attackDamage: 5
+  minSpeed: 3
+  maxSpeed: 8
   baseKillScore: 5
   headshotKillScore: 10
   baseKillHPRegen: 5

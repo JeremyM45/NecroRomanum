@@ -8,12 +8,15 @@ public class EnemyAi : MonoBehaviour
   public bool Alive {get; private set;}  = true;
   public bool HasHelmet {get; private set;} = true;
   public bool Headshot {get; set;} = false;
-  [SerializeField] private float attackRange;
-  [SerializeField] private int attackDamage;
-  [SerializeField] private int helmetHP;
   [SerializeField] private GameObject helmet; 
   [SerializeField] private LayerMask playerLayerMask;
   [SerializeField] private BoxCollider[] colliders;
+  [Header("Stats")]
+  [SerializeField] private int helmetHP;
+  [SerializeField] private float attackRange;
+  [SerializeField] private int attackDamage;
+  [SerializeField] private float minSpeed;
+  [SerializeField] private float maxSpeed;
   [Header("On Kill")]
   [SerializeField] private int baseKillScore;
   [SerializeField] private int headshotKillScore;
@@ -40,6 +43,7 @@ public class EnemyAi : MonoBehaviour
     player = GameObject.Find("Player");
     int rng = (int)Random.Range(0f, deathAnimations.Length);
     deathAnim = deathAnimations[rng];
+    SetSpeed();
   }
 
   // Update is called once per frame
@@ -52,15 +56,18 @@ public class EnemyAi : MonoBehaviour
     if(Alive)
     {
       playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayerMask); 
-      transform.LookAt(player.transform);
       transform.eulerAngles = new Vector3 (0, transform.eulerAngles.y, 0);
       if(!playerInAttackRange && canMove)
       {
         agent.SetDestination(player.transform.position);
       }
-      else if(!attacking && canMove)
+      if(playerInAttackRange)
       {
-        StartCoroutine(Attack());
+        transform.LookAt(player.transform);
+        if(!attacking && canMove)
+        {
+          StartCoroutine(Attack());
+        }
       }
     }
     animator.SetFloat("Vel", agent.velocity.magnitude);
@@ -76,28 +83,33 @@ public class EnemyAi : MonoBehaviour
   private void Death()
   {
     agent.SetDestination(transform.position);
-      Alive = false;
-      agent.enabled = false;
-      if(Headshot)
-      {
-        player.GetComponent<Score>().AddPoints(headshotKillScore);
-        int killRegenIncrement = headshotKillHPRegen / 5;
-        player.GetComponent<LifeAndDeath>().RegenerateHealth(headshotKillHPRegen, killRegenIncrement);
-      }
-      else
-      {
-        player.GetComponent<Score>().AddPoints(baseKillScore);
-        int killRegenIncrement = baseKillHPRegen / 5;
-        player.GetComponent<LifeAndDeath>().RegenerateHealth(baseKillHPRegen, killRegenIncrement);
-      }
-      
-      globalSpawnLogic.EnemiesLeftCalc(1);
-      animator.Play(deathAnim);
-      foreach(BoxCollider boxCollider in colliders)
-      {
-        boxCollider.isTrigger = true;
-      }
-      Invoke("DestroyGameObject", 10f);
+    Alive = false;
+    agent.enabled = false;
+    if(Headshot)
+    {
+      player.GetComponent<Score>().AddPoints(headshotKillScore);
+      int killRegenIncrement = headshotKillHPRegen / 5;
+      player.GetComponent<LifeAndDeath>().RegenerateHealth(headshotKillHPRegen, killRegenIncrement);
+    }
+    else
+    {
+      player.GetComponent<Score>().AddPoints(baseKillScore);
+      int killRegenIncrement = baseKillHPRegen / 5;
+      player.GetComponent<LifeAndDeath>().RegenerateHealth(baseKillHPRegen, killRegenIncrement);
+    }
+    
+    globalSpawnLogic.EnemiesLeftCalc(1);
+    animator.Play(deathAnim);
+    foreach(BoxCollider boxCollider in colliders)
+    {
+      boxCollider.isTrigger = true;
+    }
+    Invoke("DestroyGameObject", 10f);
+  }
+  private void SetSpeed()
+  {
+    float speed = Random.Range(minSpeed, maxSpeed);
+    agent.speed = speed;
   }
   IEnumerator Attack()
   {

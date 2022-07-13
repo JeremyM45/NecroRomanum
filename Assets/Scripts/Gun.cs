@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Specialized;
 using System.Runtime.Serialization;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ public class Gun : MonoBehaviour
   [SerializeField] private int maxTotalAmmo;
   [SerializeField] private int damage;
   [SerializeField] private float range;
+  [SerializeField] private int penetrationAmount;
   [SerializeField] private float accuracySpread;
   [SerializeField] private bool isShotgun;
   [SerializeField] private int pelletsInShell;
@@ -67,10 +70,11 @@ public class Gun : MonoBehaviour
     float spreadX = Random.Range(0.5f - spread, 0.5f + spread); 
     float spreadY = Random.Range(0.5f - spread, 0.5f + spread); 
     Ray shootPoint = playerCam.ViewportPointToRay(new Vector3(spreadX, spreadY, 0.1f));
-    RaycastHit hit;
-    if(Physics.Raycast(shootPoint, out hit, range))
+    RaycastHit[] hits;
+    hits = Physics.RaycastAll(shootPoint, range).OrderBy(h => h.distance).ToArray();
+    int enemeisHit = 0;
+    foreach(RaycastHit hit in hits)
     {
-      Debug.Log(hit.transform.name);
       GameObject obj;
       if(hit.transform.gameObject.layer == 9)
       {
@@ -101,12 +105,25 @@ public class Gun : MonoBehaviour
               appliedDamage = damage * 3;
             }
           }
+          if(enemeisHit > 0)
+          {
+            appliedDamage /= (enemeisHit * 2);
+          }
+          enemeisHit++;
+          if(enemeisHit > penetrationAmount)
+          {
+            break;
+          }
           enemyLad.TakeDamage(appliedDamage);
         }
       }
-      else if(hit.transform.gameObject.layer != 8 && !CheckIfCloseDecal(hit.point))
+      else if(hit.transform.gameObject.layer == 6)
       {
-        obj = Instantiate(bulletDecal, hit.point, Quaternion.LookRotation(hit.normal));
+        if(!CheckIfCloseDecal(hit.point))
+        {
+          obj = Instantiate(bulletDecal, hit.point, Quaternion.LookRotation(hit.normal));
+        }
+        break;
       }
     }
     muzzleFlash.SetActive(true);

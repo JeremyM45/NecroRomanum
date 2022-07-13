@@ -7,13 +7,10 @@ public class AmmoBox : MonoBehaviour
 {
   [SerializeField] private float range;
   [SerializeField] private int cost;
-  [SerializeField] private LayerMask playerLayerMask;
   [SerializeField] private TextMeshProUGUI textDisplay;
   private GameObject player;
   private Score playerScore;
   private Gun playerGun;
-  private bool playerInRange;
-  private bool playerStillInRange = false;
   void Start()
   {
     player = GameObject.Find("Player");
