@@ -6,6 +6,9 @@ public class SwitchWeapons : MonoBehaviour
 {
   private Gun[] guns;
   private Animator playerAnimator;
+  private int currentGunIndex;
+  private int newGunIndex;
+  private bool switchingWeapons = false;
   // Start is called before the first frame update
   void Start()
   {
@@ -13,6 +16,8 @@ public class SwitchWeapons : MonoBehaviour
     guns = transform.GetComponentsInChildren<Gun>();
     SetAllGunsInactive();
     guns[0].gameObject.SetActive(true);
+    currentGunIndex = 0;
+    playerAnimator.SetBool(guns[0].transform.name, true);
   }
 
   // Update is called once per frame
@@ -22,27 +27,20 @@ public class SwitchWeapons : MonoBehaviour
   }
     private void HandleWeaponSwitch()
   {
-    if(Input.GetKeyDown(KeyCode.Alpha1) && guns[0].gameObject.activeSelf == false)
+    if(Input.GetKeyDown(KeyCode.Alpha1) && guns[0].gameObject.activeSelf == false && !switchingWeapons)
     {
-      SetAllGunsInactive();
-      playerAnimator.SetBool("M1911", true);
-      guns[0].gameObject.SetActive(true);
-      CheckIfReloading();
+      newGunIndex = 0;
+      StartCoroutine(SwitchWeapon());
     }
-    if(Input.GetKeyDown(KeyCode.Alpha2) && guns[1].gameObject.activeSelf == false)
+    if(Input.GetKeyDown(KeyCode.Alpha2) && guns[1].gameObject.activeSelf == false && !switchingWeapons)
     {
-      
-      SetAllGunsInactive();
-      playerAnimator.SetBool("M1", true);
-      guns[1].gameObject.SetActive(true);
-      CheckIfReloading();
+      newGunIndex = 1;
+      StartCoroutine(SwitchWeapon());
     }
-    if(Input.GetKeyDown(KeyCode.Alpha3) && guns[2].gameObject.activeSelf == false)
+    if(Input.GetKeyDown(KeyCode.Alpha3) && guns[2].gameObject.activeSelf == false && !switchingWeapons)
     {
-      SetAllGunsInactive();
-      playerAnimator.SetBool("DB", true);
-      guns[2].gameObject.SetActive(true);
-      CheckIfReloading();
+      newGunIndex = 2;
+      StartCoroutine(SwitchWeapon());
     }
   }
   private void CheckIfReloading()
@@ -57,12 +55,25 @@ public class SwitchWeapons : MonoBehaviour
   }
   private void SetAllGunsInactive()
   {
-    playerAnimator.SetBool("M1911", false);
-    playerAnimator.SetBool("M1", false);
-    playerAnimator.SetBool("DB", false);
     foreach(Gun gun in guns)
     {
       gun.gameObject.SetActive(false);
+      playerAnimator.SetBool(gun.transform.name, false);
     }
+  }
+  private IEnumerator SwitchWeapon()
+  {
+    switchingWeapons = true;
+    WaitForSeconds wait = new WaitForSeconds(0.1f);
+    playerAnimator.Play(guns[currentGunIndex].transform.name + "Lower");
+    playerAnimator.SetBool(guns[currentGunIndex].transform.name, false);
+    yield return wait;
+    guns[currentGunIndex].gameObject.SetActive(false);
+    guns[newGunIndex].gameObject.SetActive(true);
+    playerAnimator.Play(guns[newGunIndex].transform.name + "Raise");
+    playerAnimator.SetBool(guns[newGunIndex].transform.name, true);
+    currentGunIndex = newGunIndex;
+    switchingWeapons = false;
+    CheckIfReloading();
   }
 }

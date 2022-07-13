@@ -30,11 +30,17 @@ public class Gun : MonoBehaviour
   private int appliedDamage;
   private int currentRoundsInMag;
   private int totalAmmo;
+  private Animator playerAnimator;
+  private Animator gunAnimator;
+  private string gunName;
   void Start()
   {
     muzzleFlash.SetActive(false);
     currentRoundsInMag = maxRoundsPerMag;
     totalAmmo = maxTotalAmmo;
+    playerAnimator = GameObject.Find("Hands").GetComponent<Animator>();
+    gunAnimator = transform.gameObject.GetComponent<Animator>();
+    gunName = transform.name;
   }
   void Update()
   {
@@ -60,10 +66,11 @@ public class Gun : MonoBehaviour
     float spread = accuracySpread / 1000;
     float spreadX = Random.Range(0.5f - spread, 0.5f + spread); 
     float spreadY = Random.Range(0.5f - spread, 0.5f + spread); 
-    Ray shootPoint = playerCam.ViewportPointToRay(new Vector3(spreadX, spreadY, 0f));
+    Ray shootPoint = playerCam.ViewportPointToRay(new Vector3(spreadX, spreadY, 0.1f));
     RaycastHit hit;
     if(Physics.Raycast(shootPoint, out hit, range))
     {
+      Debug.Log(hit.transform.name);
       GameObject obj;
       if(hit.transform.gameObject.layer == 9)
       {
@@ -109,13 +116,23 @@ public class Gun : MonoBehaviour
       currentRoundsInMag++;
       Shoot();
     }
-    else
+    else if(isShotgun && pelletsFired >= pelletsInShell)
     {
       pelletsFired = 0;
       shooting = false;
       StartCoroutine(MuzzleFlash());
       StartCoroutine(ResetShot());
       decalPos.Clear();
+      playerAnimator.Play(gunName + "Fire");
+    }
+    else if(!isShotgun)
+    {
+      shooting = false;
+      StartCoroutine(MuzzleFlash());
+      StartCoroutine(ResetShot());
+      decalPos.Clear();
+      playerAnimator.Play(gunName + "Fire");
+      gunAnimator.Play(gunName + "Fire");
     }
   }
   public void FillAmmo()
@@ -160,13 +177,27 @@ public class Gun : MonoBehaviour
     readyToShoot = true;
     Reloading = false;
   }
+  public bool IsAmmoFull()
+  {
+    if(currentRoundsInMag == maxRoundsPerMag && totalAmmo == maxTotalAmmo)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
   private IEnumerator Reload()
   {
+    playerAnimator.Play(transform.name + "Lower");
+    playerAnimator.SetBool("Reloading", true);
     readyToShoot = false;
     Reloading = true;
     yield return new WaitForSeconds(reloadTime);
     ReloadGun();
     Reloading = false;
+    playerAnimator.SetBool("Reloading", false);
     readyToShoot = true;
   }
   private IEnumerator MuzzleFlash()
@@ -177,6 +208,7 @@ public class Gun : MonoBehaviour
   private IEnumerator ResetShot()
   {
     yield return new WaitForSeconds(timeBetweenShots);
+    
     readyToShoot = true;
   }
 }

@@ -5,12 +5,12 @@ using TMPro;
 
 public class Score : MonoBehaviour
 {
-  public int CurrentScore {get; private set;}
+  [SerializeField] public int CurrentScore;
   [SerializeField] private TextMeshProUGUI scoreDisplay;
   // Start is called before the first frame update
   void Start()
   {
-    CurrentScore = 0;
+    // CurrentScore = 0;
   }
   void Update()
   {

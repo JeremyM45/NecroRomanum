@@ -10,35 +10,34 @@ public class Door : MonoBehaviour
   [SerializeField] LayerMask playerLayer;
   [SerializeField] TextMeshProUGUI textDisplay;
   private Score playerScore;
-  private bool playerStillInRange;
+  private bool bought;
   // Start is called before the first frame update
   void Start()
   {
     playerScore = GameObject.Find("Player").GetComponent<Score>();
-    StartCoroutine(PlayerCheck());
     textDisplay.SetText("");
+    bought = false;
   }
-  IEnumerator PlayerCheck()
+  void OnTriggerStay(Collider obj)
   {
-    WaitForSeconds wait = new WaitForSeconds(0.2f);
-    while(true)
+    if(obj.transform.name == "Player" && !bought)
     {
-      yield return wait;
-      bool playerInRange = Physics.CheckSphere(transform.position, range, playerLayer);
-      if(playerInRange && !playerStillInRange)
+      textDisplay.SetText("Press 'E' to Open Door for " + cost + " points");
+      if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
       {
-        playerStillInRange = true;
-        textDisplay.SetText("Press 'E' to Open Door for " + cost + " points");
-        if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
-        {
-          Destroy(gameObject);
-        }
-      }
-      else if(!playerInRange && playerStillInRange)
-      {
-        playerStillInRange = false;
         textDisplay.SetText("");
+        bought = true;
+        playerScore.removePoints(cost);
+        Invoke("DestroyDoor", 0.2f);
       }
     }
+  }
+  void OnTriggerExit()
+  {
+    textDisplay.SetText("");
+  }
+  void DestroyDoor()
+  {
+    Destroy(gameObject);
   }
 }

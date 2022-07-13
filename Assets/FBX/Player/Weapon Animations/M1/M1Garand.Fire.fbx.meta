@@ -1,11 +1,14 @@
 fileFormatVersion: 2
-guid: 350c07e361a54b749b9acd8f70d1e0e2
+guid: a87241226218dee449c04e1af42ea5d2
 ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: -6930718206932822258
-    second: DoubleBarrel|Idle
+      74: 7136355633475973981
+    second: M1Garand|Idle
+  - first:
+      74: 1637657230478160040
+    second: M1Garand|M1GarandFire
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,8 +39,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: DoubleBarrel|Idle
-      takeName: DoubleBarrel|Idle
+      name: M1Garand|Idle
+      takeName: M1Garand|Idle
       internalID: 0
       firstFrame: 0
       lastFrame: 24
@@ -48,6 +51,35 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: M1Garand|M1GarandFire
+      takeName: M1Garand|M1GarandFire
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 5
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -125,7 +157,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 849c1e406c3367d4aa5f695437184413, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: e72b2595670a40e45837199316b34638, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1

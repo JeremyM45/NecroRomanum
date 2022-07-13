@@ -1223,6 +1223,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   currentHealth: 0
+  healthDisplay: {fileID: 0}
+  isPlayer: 0
   maxRegenAmount: 0
   timeBetweenRegenIncrements: 0
   timeBeforeRegenStarts: 0

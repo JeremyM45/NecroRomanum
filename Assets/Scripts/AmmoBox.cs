@@ -19,23 +19,23 @@ public class AmmoBox : MonoBehaviour
     player = GameObject.Find("Player");
     playerScore = player.GetComponent<Score>();
   }
-  void Update()
+  void OnTriggerStay(Collider obj)
   {
-    playerInRange = Physics.CheckSphere(transform.position, range, playerLayerMask);
-    if(!playerInRange && playerStillInRange)
-    {
-      textDisplay.SetText("");
-      playerStillInRange = false;
-    }
-    if(playerInRange && !playerStillInRange)
+    Gun currentGun = player.GetComponentInChildren<Gun>();
+    if(obj.transform.name == "Player")
     {
       textDisplay.SetText("Press 'E' To Fill Ammo for " + cost + " points");
-      playerStillInRange = true;
-      if(Input.GetKeyDown(KeyCode.E) && playerScore.CurrentScore >= cost)
+      Debug.Log(playerScore.CurrentScore);
+      if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost && !currentGun.IsAmmoFull())
       {
         player.GetComponentInChildren<Gun>().FillAmmo();
         playerScore.removePoints(cost);
       }
     }
   }
+  void OnTriggerExit()
+  {
+    textDisplay.SetText("");
+  }
 }
+
