@@ -32,40 +32,22 @@ public class UpgradeGun : MonoBehaviour
         if(baseGun.activeSelf == true)
         {
           cost = 250;
-          if(Input.GetKeyDown(KeyCode.E) && playerScore.CurrentScore >= cost)
-          {
-            canUpgrade = false;
-            if(currentGun.name == "M1911")
-            {
-              UpgradeM1911();
-            }
-            currentGun.transform.Find(currentGun.name + " First Upgrade").gameObject.SetActive(true);
-            currentGun.transform.Find(currentGun.name + "BaseMesh").gameObject.SetActive(false);
-            playerScore.removePoints(cost);
-            Invoke("ResetCooldown", 0.5f);
-          }
-          
         }
         else if(firstUpgrade.activeSelf == true)
         {
           cost = 500;
-          if(Input.GetKeyDown(KeyCode.E) && playerScore.CurrentScore >= cost)
-          {
-            canUpgrade = false;
-            if(currentGun.name == "M1911")
-            {
-              UpgradeM1911();
-            }
-            currentGun.transform.Find(currentGun.name + " First Upgrade").gameObject.SetActive(false);
-            currentGun.transform.Find(currentGun.name + " Second Upgrade").gameObject.SetActive(true);
-            playerScore.removePoints(cost);
-            Invoke("ResetCooldown", 0.5f);
-          }
         }
         textDisplay.SetText("Press 'E' To Upgrade " + currentGun.name + " for " + cost + " points");
         if(secondUpgrade.activeSelf == true)
         {
           textDisplay.SetText("");
+        }
+        if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+        {
+          canUpgrade = false;
+          UpgradeCurrentGun();
+          playerScore.removePoints(cost);
+          Invoke("ResetCooldown", 0.5f);
         }
       }
     }
@@ -78,21 +60,83 @@ public class UpgradeGun : MonoBehaviour
   { 
     canUpgrade = true;
   }
-  private void UpgradeM1911()
+  private void UpgradeCurrentGun()
   {
-    if(baseGun.activeSelf == true)
+    bool isFirstTimeUpgrade = IsFirstTimeUpgrade();
+    if(currentGun.name == "M1911")
+    {
+      UpgradeM1911(isFirstTimeUpgrade);
+    }
+    else if(currentGun.name == "M1Garand")
+    {
+      UpgradeM1(isFirstTimeUpgrade);
+    }
+    else if(currentGun.name == "DoubleBarrel")
+    {
+      UpgradeDB(isFirstTimeUpgrade);
+    }
+    else if(currentGun.name == "Thompson")
+    {
+      UpgradeThompson(isFirstTimeUpgrade);
+    }
+    else
+    {
+      Debug.Log("Name Match Fail");
+    }
+    SetNewUpgradedGun(isFirstTimeUpgrade);
+    currentGun.FillAmmo();
+  }
+  private void UpgradeM1911(bool isFirstTimeUpgrade)
+  {
+    
+    if(isFirstTimeUpgrade)
     {
       currentGun.damage = 6;
       currentGun.maxTotalAmmo = 160;
       currentGun.maxRoundsPerMag = 12;
     } 
-    else if(firstUpgrade.activeSelf == true)
+    else
     {
       currentGun.damage = 8;
       currentGun.maxTotalAmmo = 240;
       currentGun.maxRoundsPerMag = 16;
       currentGun.isAutomatic = true;
     }
-    currentGun.FillAmmo();
+  }
+  private void UpgradeM1(bool isFirstTimeUpgrade)
+  {
+
+  }
+  private void UpgradeDB(bool isFirstTimeUpgrade)
+  {
+    
+  }
+  private void UpgradeThompson(bool isFirstTimeUpgrade)
+  {
+    
+  }
+  private void SetNewUpgradedGun(bool firstTimeUpgrade)
+  {
+    if(firstTimeUpgrade)
+    {
+      firstUpgrade.gameObject.SetActive(true);
+      baseGun.gameObject.SetActive(false);
+    }
+    else
+    {
+      secondUpgrade.gameObject.SetActive(true);
+      firstUpgrade.gameObject.SetActive(false);
+    }
+  }
+  private bool IsFirstTimeUpgrade()
+  {
+    if(baseGun.activeSelf == true)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 }
