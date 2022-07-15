@@ -20,7 +20,15 @@ public class LifeAndDeath : MonoBehaviour
   private Coroutine regenHealthRoutine;
   void Awake()
   {
-    currentHealth = maxHealth;
+    if(!isPlayer)
+    {
+      SetMaxHealth(GameObject.Find("GlobalSpawnLogic").GetComponent<GlobalSpawnLogic>().Hp);
+    }
+    else
+    {
+      currentHealth = maxHealth;
+    }
+
   }
   void Update()
   {
@@ -56,6 +64,11 @@ public class LifeAndDeath : MonoBehaviour
   public void RegenerateHealth(int regenAmount, int regenIncrement)
   {
     regenHealthRoutine = StartCoroutine(RegenHealth(regenAmount, regenIncrement));
+  }
+  public void SetMaxHealth(int hp)
+  {
+    maxHealth = hp;
+    currentHealth = maxHealth;
   }
   private IEnumerator RegenHealth(int regenAmount, int regenIncrement)
   {

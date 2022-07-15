@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,11 @@ public class PlayerController : MonoBehaviour
 {
   public bool CanMove {get; private set;} = true;
   private bool ShouldJump => Input.GetKey(jumpKey) && playerController.isGrounded;
+  private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash;
 
   [Header("Controls")]
   [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+  [SerializeField] private KeyCode dashKey = KeyCode.LeftShift;
 
   [Header("Look Parameters")]
   [SerializeField, Range(1, 1000)] private float lookSpeed = 2f;
@@ -18,17 +21,27 @@ public class PlayerController : MonoBehaviour
   [SerializeField] private float walkSpeed = 10f;
   [SerializeField] private float jumpForce = 10f;
   [SerializeField] private float gravity = 30f;
+  [Header("Dash Parameters")]
+  [SerializeField] private float dashAmount = 30f;
+  [SerializeField] private float dashIncrement = 2f;
+  [SerializeField] private float dashCooldown = 2f;
 
+  [Header("Sounds")]
+  [SerializeField] AudioClip[] dashSounds;
   [SerializeField] private Transform arms;
+  private AudioSource audioSource;
   private CharacterController playerController;
   private Vector3 moveDirection;
   private Vector2 currentInput;
   private float rotaionX = 0f;
+  private bool dashing = false;
+  private bool canDash = true;
   
   // Start is called before the first frame update
   void Awake()
   {
     playerController = GetComponent<CharacterController>();
+    audioSource = GetComponent<AudioSource>();
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
   }
@@ -38,14 +51,20 @@ public class PlayerController : MonoBehaviour
   {
     if(CanMove)
     {
-      HandleMovement();
       HandleLook();
       if(ShouldJump)
       {
         HandleJump();
       }
-
-      ApplyFinalMovements();
+      if(ShouldDash)
+      {
+        StartCoroutine(Dash());
+      }
+      if(!dashing)
+      {
+        HandleMovement();
+        ApplyFinalMovements();
+      }
     }
   }
   private void HandleMovement()
@@ -57,10 +76,10 @@ public class PlayerController : MonoBehaviour
   }
   private void HandleLook()
   {
-    rotaionX -= Input.GetAxis("Mouse Y") * lookSpeed * Time.deltaTime;
+    rotaionX -= Input.GetAxisRaw("Mouse Y") * lookSpeed * Time.deltaTime;
     rotaionX = Mathf.Clamp(rotaionX, -verticalLookLimit, verticalLookLimit);
     arms.transform.localRotation = Quaternion.Euler(rotaionX, 0, 0);
-    transform.Rotate(new Vector3(0, Input.GetAxis("Mouse X") * lookSpeed * Time.deltaTime, 0));
+    transform.Rotate(new Vector3(0, Input.GetAxisRaw("Mouse X") * lookSpeed * Time.deltaTime, 0));
   }
   private void ApplyFinalMovements()
   {
@@ -78,5 +97,38 @@ public class PlayerController : MonoBehaviour
   private void HandleJump()
   {
     moveDirection.y = jumpForce;
+  }
+  private IEnumerator Dash()
+  {
+    WaitForSeconds wait = new WaitForSeconds(0.001f);
+    dashing = true;
+    canDash = false;
+    Vector3 dashDirection;
+    Vector2 input = new Vector2(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+    if(input.y != -1f && input.y != 1f)
+    {
+      if(input.x == 0)
+      {
+        input.x = 1;
+      }
+      dashDirection = transform.TransformDirection(Vector3.forward) * input.x;
+    }
+    else
+    {
+      dashDirection = transform.TransformDirection(Vector3.right) * input.y;
+    }
+    int rng = Random.Range(0, dashSounds.Length);
+    audioSource.PlayOneShot(dashSounds[rng]);
+    float i = 0;
+    while(i < dashAmount)
+    {
+      playerController.Move(dashDirection * dashIncrement * Time.deltaTime);
+      i += dashIncrement;
+      yield return wait;
+    }
+    dashing = false;
+    WaitForSeconds cooldown = new WaitForSeconds(dashCooldown);
+    yield return cooldown;
+    canDash = true;
   }
 }

@@ -11,6 +11,12 @@ public class EnemyAi : MonoBehaviour
   [SerializeField] private GameObject helmet; 
   [SerializeField] private LayerMask playerLayerMask;
   [SerializeField] private BoxCollider[] colliders;
+  [Header("Audio")]
+  [SerializeField] private AudioClip[] idleSounds;
+  [SerializeField] private AudioClip[] attackSounds;
+  [SerializeField] private AudioClip[] deathSounds;
+  [SerializeField] private float minTimeToSound;
+  [SerializeField] private float maxTimeToSound;
   [Header("Stats")]
   [SerializeField] private int helmetHP;
   [SerializeField] private float attackRange;
@@ -24,13 +30,14 @@ public class EnemyAi : MonoBehaviour
   [SerializeField] private int headshotKillHPRegen;
   private bool playerInAttackRange = false;
   private bool attacking = false;
-  
+  private bool canMakeSound;
   private bool canMove = true;
   private NavMeshAgent agent;
   private Animator animator;
   private LifeAndDeath ladScript;
   private GameObject player;
   private GlobalSpawnLogic globalSpawnLogic;
+  private AudioSource audioSource;
   
   private string[] deathAnimations = new string[] {"Death1", "Death2", "Death3"};
   private string deathAnim;
@@ -43,7 +50,9 @@ public class EnemyAi : MonoBehaviour
     player = GameObject.Find("Player");
     int rng = (int)Random.Range(0f, deathAnimations.Length);
     deathAnim = deathAnimations[rng];
-    SetSpeed();
+    audioSource = GetComponent<AudioSource>();
+    StartCoroutine(IdleSoundCheck());
+    SetSpeed(globalSpawnLogic.MinSpeed, globalSpawnLogic.MaxSpeed);
   }
 
   // Update is called once per frame
@@ -83,6 +92,7 @@ public class EnemyAi : MonoBehaviour
   private void Death()
   {
     agent.SetDestination(transform.position);
+    PlayDeathSound();
     Alive = false;
     agent.enabled = false;
     if(Headshot)
@@ -106,14 +116,45 @@ public class EnemyAi : MonoBehaviour
     }
     Invoke("DestroyGameObject", 10f);
   }
-  private void SetSpeed()
+  private void SetSpeed(float min, float max)
   {
+    minSpeed = min;
+    maxSpeed = max;
     float speed = Random.Range(minSpeed, maxSpeed);
     agent.speed = speed;
   }
-  IEnumerator Attack()
+  private void PlayAttackSound()
+  {
+    if(attackSounds.Length > 1)
+    { 
+      int rng = Random.Range(0, attackSounds.Length);
+      audioSource.PlayOneShot(attackSounds[rng]);
+    }
+    else
+    {
+      audioSource.PlayOneShot(attackSounds[0]);
+    }
+  }
+  private void PlayDeathSound()
+  {
+    bool playDeathSound = Random.Range(0, 2) > 0;
+    if(playDeathSound)
+    {
+      if(attackSounds.Length > 1)
+      { 
+        int rng = Random.Range(0, deathSounds.Length);
+        audioSource.PlayOneShot(deathSounds[rng]);
+      }
+      else
+      {
+        audioSource.PlayOneShot(deathSounds[0]);
+      }
+    }
+  }
+  private IEnumerator Attack()
   {
     attacking = true;
+    PlayAttackSound();
     animator.SetBool("Attacking", true);
     yield return new WaitForSeconds(0.2f);
     if(Physics.CheckSphere(transform.position, attackRange, playerLayerMask))
@@ -134,15 +175,26 @@ public class EnemyAi : MonoBehaviour
     yield return new WaitForSeconds(1.5f);
     attacking = false;
   }
-  IEnumerator HelmetHit()
+  private IEnumerator HelmetHit()
   {
     canMove = false;
+    agent.SetDestination(transform.position);
     HasHelmet = !HasHelmet;
     animator.Play("HelmetHit");
     yield return new WaitForSeconds(0.2f);
     helmet.SetActive(false);
     yield return new WaitForSeconds(0.2f);
     canMove = true;
+  }
+  private IEnumerator IdleSoundCheck()
+  {
+    WaitForSeconds wait = new WaitForSeconds(Random.Range(minTimeToSound, maxTimeToSound));
+    while(Alive)
+    {
+      int rng = Random.Range(0, idleSounds.Length);
+      audioSource.PlayOneShot(idleSounds[rng]);
+      yield return wait;
+    }
   }
   private void DestroyGameObject()
   {

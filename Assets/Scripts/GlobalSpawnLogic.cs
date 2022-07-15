@@ -5,6 +5,9 @@ using TMPro;
 public class GlobalSpawnLogic : MonoBehaviour
 {
   public int NumOfEnemiesLeft {get; private set;}
+  public float MinSpeed {get; private set;}
+  public float MaxSpeed {get; private set;}
+  public int Hp {get; private set;}
   public int NumOfEnemiesToSpawn {get; set;}
   public bool NewRoundCooldown {get; private set;}
   public int Round;
@@ -33,23 +36,39 @@ public class GlobalSpawnLogic : MonoBehaviour
     {
       case 1:
         NumOfEnemiesToSpawn = 8;
+        MinSpeed = 3;
+        MaxSpeed = 5;
+        Hp = 4;
         break;
       case 2:
         NumOfEnemiesToSpawn = 16;
+        MinSpeed = 4;
+        MaxSpeed = 6;
+        Hp = 6;
         break;
       case 3:
         NumOfEnemiesToSpawn = 24;
+        MinSpeed = 6;
+        MaxSpeed = 8;
+        Hp = 10;
         break;
       case 4:
         NumOfEnemiesToSpawn = 36;
+        MinSpeed = 6;
+        MaxSpeed = 10;
+        Hp = 14;
         break;
       case 5:
         NumOfEnemiesToSpawn = 56;
+        MinSpeed = 6;
+        MaxSpeed = 12;
+        Hp = 18;
         break;
     }
     if(Round > 5)
     {
       NumOfEnemiesToSpawn = 72;
+      Hp = 22;
     }
   }
   private void NewRound()

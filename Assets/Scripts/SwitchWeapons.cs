@@ -27,19 +27,24 @@ public class SwitchWeapons : MonoBehaviour
   }
     private void HandleWeaponSwitch()
   {
-    if(Input.GetKeyDown(KeyCode.Alpha1) && guns[0].gameObject.activeSelf == false && !switchingWeapons)
+    if(Input.GetKeyDown(KeyCode.Alpha1) && guns[0].gameObject.activeSelf == false && guns[0].CanEquip && !switchingWeapons)
     {
       newGunIndex = 0;
       StartCoroutine(SwitchWeapon());
     }
-    if(Input.GetKeyDown(KeyCode.Alpha2) && guns[1].gameObject.activeSelf == false && !switchingWeapons)
+    if(Input.GetKeyDown(KeyCode.Alpha2) && guns[1].gameObject.activeSelf == false && guns[1].CanEquip && !switchingWeapons)
     {
       newGunIndex = 1;
       StartCoroutine(SwitchWeapon());
     }
-    if(Input.GetKeyDown(KeyCode.Alpha3) && guns[2].gameObject.activeSelf == false && !switchingWeapons)
+    if(Input.GetKeyDown(KeyCode.Alpha3) && guns[2].gameObject.activeSelf == false && guns[2].CanEquip && !switchingWeapons)
     {
       newGunIndex = 2;
+      StartCoroutine(SwitchWeapon());
+    }
+    if(Input.GetKeyDown(KeyCode.Alpha4) && guns[3].gameObject.activeSelf == false && guns[3].CanEquip && !switchingWeapons)
+    {
+      newGunIndex = 3;
       StartCoroutine(SwitchWeapon());
     }
   }

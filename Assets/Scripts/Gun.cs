@@ -8,24 +8,29 @@ using TMPro;
 
 public class Gun : MonoBehaviour
 {
-  public bool Reloading {get; set;} = false;
+  public bool Reloading = false;
+  public bool CanEquip = false;
+  public float timeBetweenShots;
+  public int maxRoundsPerMag;
+  public float reloadTime;
+  public int maxTotalAmmo;
+  public int damage;
+  public float range;
+  public int penetrationAmount;
+  public float accuracySpread;
+  public bool isShotgun;
+  public int pelletsInShell;
+  public bool isAutomatic;
   [SerializeField] private GameObject bulletDecal;
   [SerializeField] private GameObject enemyHitDecal;
   [SerializeField] private GameObject muzzleFlash;
   [SerializeField] private float flashEffectTime = 0.05f;
   [SerializeField] private Camera playerCam;
   [SerializeField] private TextMeshProUGUI ammoCounter;
-  [Header("Stats")]
-  [SerializeField] private float timeBetweenShots;
-  [SerializeField] private int maxRoundsPerMag;
-  [SerializeField] private float reloadTime;
-  [SerializeField] private int maxTotalAmmo;
-  [SerializeField] private int damage;
-  [SerializeField] private float range;
-  [SerializeField] private int penetrationAmount;
-  [SerializeField] private float accuracySpread;
-  [SerializeField] private bool isShotgun;
-  [SerializeField] private int pelletsInShell;
+  [Header("Sounds")]
+  [SerializeField] private AudioClip shot;
+  [SerializeField] private AudioClip empty;
+  [SerializeField] private AudioClip reload;
   private List<Vector3> decalPos = new List<Vector3>();
   private bool readyToShoot = true;
   private bool shooting = false;
@@ -35,6 +40,7 @@ public class Gun : MonoBehaviour
   private int totalAmmo;
   private Animator playerAnimator;
   private Animator gunAnimator;
+  private AudioSource audioSource;
   private string gunName;
   void Start()
   {
@@ -44,28 +50,32 @@ public class Gun : MonoBehaviour
     playerAnimator = GameObject.Find("Hands").GetComponent<Animator>();
     gunAnimator = transform.gameObject.GetComponent<Animator>();
     gunName = transform.name;
+    audioSource = GetComponent<AudioSource>();
+    if(gunName == "M1911")
+    {
+      CanEquip = true;
+    }
   }
   void Update()
   {
     ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
-    if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag > 0)
+    if(Input.GetKey(KeyCode.Mouse0) && isAutomatic && readyToShoot && !Reloading && currentRoundsInMag > 0 || Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag > 0)
     {
       Shoot();
     }
-    else if(Input.GetKeyDown(KeyCode.R) && !shooting && !Reloading && currentRoundsInMag != maxRoundsPerMag)
+    else if(Input.GetKeyDown(KeyCode.R) && !shooting && !Reloading && currentRoundsInMag != maxRoundsPerMag && totalAmmo > 0)
     {
-      StartCoroutine(Reload());
+      StartRelaodRoutine();
     }
-    else if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag <= 0)
+    else if(Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag == 0 && totalAmmo == 0)
     {
-      StartCoroutine(Reload());
+      audioSource.PlayOneShot(empty);
     }
   }
   private void Shoot()
   {
     readyToShoot = false;
     shooting = true;
-    currentRoundsInMag--;
     float spread = accuracySpread / 1000;
     float spreadX = Random.Range(0.5f - spread, 0.5f + spread); 
     float spreadY = Random.Range(0.5f - spread, 0.5f + spread); 
@@ -97,7 +107,16 @@ public class Gun : MonoBehaviour
             enemyAi.Headshot = true;
             if(enemyAi.HasHelmet)
             {
-              appliedDamage = damage / 4;
+              int appliedPen;
+              if(penetrationAmount == 0)
+              {
+                appliedPen = 1;
+              }
+              else
+              {
+                appliedPen = penetrationAmount;
+              }
+              appliedDamage = (damage * appliedPen) / 4;
               enemyAi.HelmetTakeDamage(damage);
             }
             else
@@ -110,11 +129,11 @@ public class Gun : MonoBehaviour
             appliedDamage /= (enemeisHit * 2);
           }
           enemeisHit++;
+          enemyLad.TakeDamage(appliedDamage);
           if(enemeisHit > penetrationAmount)
           {
             break;
           }
-          enemyLad.TakeDamage(appliedDamage);
         }
       }
       else if(hit.transform.gameObject.layer == 6)
@@ -141,15 +160,22 @@ public class Gun : MonoBehaviour
       StartCoroutine(ResetShot());
       decalPos.Clear();
       playerAnimator.Play(gunName + "Fire");
+      audioSource.PlayOneShot(shot);
     }
     else if(!isShotgun)
     {
       shooting = false;
       StartCoroutine(MuzzleFlash());
       StartCoroutine(ResetShot());
+      audioSource.PlayOneShot(shot);
       decalPos.Clear();
       playerAnimator.Play(gunName + "Fire");
       gunAnimator.Play(gunName + "Fire");
+    }
+    currentRoundsInMag--;
+    if(currentRoundsInMag <= 0 && totalAmmo > 0)
+    {
+      Invoke("StartRelaodRoutine", 0.2f);
     }
   }
   public void FillAmmo()
@@ -205,13 +231,20 @@ public class Gun : MonoBehaviour
       return false;
     }
   }
+  private void StartRelaodRoutine()
+  {
+    StartCoroutine(Reload());
+  }
   private IEnumerator Reload()
   {
     playerAnimator.Play(transform.name + "Lower");
     playerAnimator.SetBool("Reloading", true);
     readyToShoot = false;
     Reloading = true;
-    yield return new WaitForSeconds(reloadTime);
+    WaitForSeconds wait = new WaitForSeconds(0.2f);
+    yield return wait;
+    audioSource.PlayOneShot(reload);
+    yield return new WaitForSeconds(reloadTime - 0.2f);
     ReloadGun();
     Reloading = false;
     playerAnimator.SetBool("Reloading", false);

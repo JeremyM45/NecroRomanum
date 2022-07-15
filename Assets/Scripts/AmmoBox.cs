@@ -22,7 +22,6 @@ public class AmmoBox : MonoBehaviour
     if(obj.transform.name == "Player")
     {
       textDisplay.SetText("Press 'E' To Fill Ammo for " + cost + " points");
-      Debug.Log(playerScore.CurrentScore);
       if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost && !currentGun.IsAmmoFull())
       {
         player.GetComponentInChildren<Gun>().FillAmmo();
