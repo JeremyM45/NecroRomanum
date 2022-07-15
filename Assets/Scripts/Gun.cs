@@ -21,6 +21,9 @@ public class Gun : MonoBehaviour
   public bool isShotgun;
   public int pelletsInShell;
   public bool isAutomatic;
+  public bool isBurst;
+  public int roundsInBurst;
+  public float timeBetweenShotsInBurst;
   [SerializeField] private GameObject bulletDecal;
   [SerializeField] private GameObject enemyHitDecal;
   [SerializeField] private GameObject muzzleFlash;
@@ -36,6 +39,7 @@ public class Gun : MonoBehaviour
   private bool readyToShoot = true;
   private bool shooting = false;
   private int pelletsFired;
+  private int roundsInBurstFired;
   private int appliedDamage;
   private int currentRoundsInMag;
   private int totalAmmo;
@@ -145,23 +149,47 @@ public class Gun : MonoBehaviour
       }
     }
     muzzleFlash.SetActive(true);
-    if(isShotgun && pelletsFired < pelletsInShell)
+    if(isShotgun)
     {
       pelletsFired++;
-      currentRoundsInMag++;
-      Shoot();
+      if(pelletsFired < pelletsInShell)
+      {
+        currentRoundsInMag++;
+        Shoot();
+      }
+      else if(pelletsFired >= pelletsInShell)
+      {
+        pelletsFired = 0;
+        shooting = false;
+        StartCoroutine(MuzzleFlash());
+        StartCoroutine(ResetShot());
+        decalPos.Clear();
+        playerAnimator.Play(gunName + "Fire");
+        audioSource.PlayOneShot(shot);
+      }
     }
-    else if(isShotgun && pelletsFired >= pelletsInShell)
+    if(isBurst)
     {
-      pelletsFired = 0;
-      shooting = false;
-      StartCoroutine(MuzzleFlash());
-      StartCoroutine(ResetShot());
-      decalPos.Clear();
-      playerAnimator.Play(gunName + "Fire");
-      audioSource.PlayOneShot(shot);
+      roundsInBurstFired++;
+      if(roundsInBurstFired < roundsInBurst)
+      {
+        Invoke("Shoot", timeBetweenShotsInBurst);
+        StartCoroutine(MuzzleFlash());
+        playerAnimator.Play(gunName + "Fire");
+        audioSource.PlayOneShot(shot);
+      }
+      else if(roundsInBurstFired >= roundsInBurst)
+      {
+        roundsInBurstFired = 0;
+        shooting = false;
+        StartCoroutine(MuzzleFlash());
+        StartCoroutine(ResetShot());
+        decalPos.Clear();
+        playerAnimator.Play(gunName + "Fire");
+        audioSource.PlayOneShot(shot);
+      }
     }
-    else if(!isShotgun)
+    if(!isShotgun && !isBurst)
     {
       shooting = false;
       StartCoroutine(MuzzleFlash());

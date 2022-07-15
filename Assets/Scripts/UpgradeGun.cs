@@ -105,7 +105,22 @@ public class UpgradeGun : MonoBehaviour
   }
   private void UpgradeM1(bool isFirstTimeUpgrade)
   {
-
+    if(isFirstTimeUpgrade)
+    {
+      currentGun.damage = 20;
+      currentGun.maxTotalAmmo = 120;
+      currentGun.maxRoundsPerMag = 12;
+      currentGun.penetrationAmount = 8;
+    } 
+    else
+    {
+      currentGun.damage = 20;
+      currentGun.maxTotalAmmo = 360;
+      currentGun.maxRoundsPerMag = 36;
+      currentGun.isBurst = true;
+      currentGun.roundsInBurst = 3;
+      currentGun.timeBetweenShotsInBurst = 0.05f;
+    }
   }
   private void UpgradeDB(bool isFirstTimeUpgrade)
   {
