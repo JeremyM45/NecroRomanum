@@ -77,6 +77,7 @@ public class SwitchWeapons : MonoBehaviour
     guns[newGunIndex].gameObject.SetActive(true);
     playerAnimator.Play(guns[newGunIndex].transform.name + "Raise");
     playerAnimator.SetBool(guns[newGunIndex].transform.name, true);
+    guns[newGunIndex].CanShoot();
     currentGunIndex = newGunIndex;
     switchingWeapons = false;
     CheckIfReloading();

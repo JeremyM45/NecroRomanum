@@ -31,6 +31,7 @@ public class Gun : MonoBehaviour
   [SerializeField] private AudioClip shot;
   [SerializeField] private AudioClip empty;
   [SerializeField] private AudioClip reload;
+
   private List<Vector3> decalPos = new List<Vector3>();
   private bool readyToShoot = true;
   private bool shooting = false;
@@ -39,7 +40,6 @@ public class Gun : MonoBehaviour
   private int currentRoundsInMag;
   private int totalAmmo;
   private Animator playerAnimator;
-  private Animator gunAnimator;
   private AudioSource audioSource;
   private string gunName;
   void Start()
@@ -48,7 +48,6 @@ public class Gun : MonoBehaviour
     currentRoundsInMag = maxRoundsPerMag;
     totalAmmo = maxTotalAmmo;
     playerAnimator = GameObject.Find("Hands").GetComponent<Animator>();
-    gunAnimator = transform.gameObject.GetComponent<Animator>();
     gunName = transform.name;
     audioSource = GetComponent<AudioSource>();
     if(gunName == "M1911")
@@ -170,7 +169,6 @@ public class Gun : MonoBehaviour
       audioSource.PlayOneShot(shot);
       decalPos.Clear();
       playerAnimator.Play(gunName + "Fire");
-      gunAnimator.Play(gunName + "Fire");
     }
     currentRoundsInMag--;
     if(currentRoundsInMag <= 0 && totalAmmo > 0)
@@ -230,6 +228,11 @@ public class Gun : MonoBehaviour
     {
       return false;
     }
+  }
+  public void CanShoot()
+  {
+    shooting = false;
+    readyToShoot = true;
   }
   private void StartRelaodRoutine()
   {
