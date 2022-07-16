@@ -140,7 +140,22 @@ public class UpgradeGun : MonoBehaviour
   }
   private void UpgradeThompson(bool isFirstTimeUpgrade)
   {
-    
+    if(isFirstTimeUpgrade)
+    {
+      currentGun.damage = 8;
+      currentGun.penetrationAmount = 2;
+      currentGun.maxTotalAmmo = 500;
+      currentGun.maxRoundsPerMag = 100;
+      currentGun.timeBetweenShots = 0.07f;
+    }
+    else
+    {
+      currentGun.maxTotalAmmo = 0;
+      currentGun.maxRoundsPerMag = 999;
+      currentGun.magOnly = true;
+      currentGun.timeBetweenShots = 0.04f;
+      currentGun.penetrationAmount = 4;
+    }
   }
   private void SetNewUpgradedGun(bool firstTimeUpgrade)
   {

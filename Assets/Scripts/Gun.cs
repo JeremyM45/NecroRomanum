@@ -22,6 +22,7 @@ public class Gun : MonoBehaviour
   public int pelletsInShell;
   public bool isAutomatic;
   public bool isBurst;
+  public bool magOnly;
   public int roundsInBurst;
   public float timeBetweenShotsInBurst;
   public float minDecalPosDist {get; set;} = 0.1f;
@@ -62,7 +63,14 @@ public class Gun : MonoBehaviour
   }
   void Update()
   {
-    ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
+    if(!magOnly)
+    {
+      ammoCounter.SetText(currentRoundsInMag + " / " + totalAmmo);
+    }
+    else
+    {
+      ammoCounter.SetText(currentRoundsInMag.ToString());
+    }
     if(Input.GetKey(KeyCode.Mouse0) && isAutomatic && readyToShoot && !Reloading && currentRoundsInMag > 0 || Input.GetKeyDown(KeyCode.Mouse0) && readyToShoot && !Reloading && currentRoundsInMag > 0)
     {
       Shoot();
