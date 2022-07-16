@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
   public bool CanMove {get; private set;} = true;
+  public bool isFallingFromGrapple;
   public bool isGrappling;
   private bool ShouldJump => Input.GetKey(jumpKey) && playerController.isGrounded;
   private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash;
@@ -38,6 +39,8 @@ public class PlayerController : MonoBehaviour
   private bool dashing = false;
   private bool canDash = true;
   
+  private GrapplingHook grappleHookLogic;
+  
   // Start is called before the first frame update
   void Awake()
   {
@@ -45,6 +48,7 @@ public class PlayerController : MonoBehaviour
     audioSource = GetComponent<AudioSource>();
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
+    grappleHookLogic = GetComponent<GrapplingHook>();
   }
 
   // Update is called once per frame
@@ -84,7 +88,22 @@ public class PlayerController : MonoBehaviour
   }
   private void ApplyFinalMovements()
   {
-    if(!playerController.isGrounded)
+    if(isFallingFromGrapple)
+    {
+      bool grounded = Physics.Raycast(transform.position, transform.up * -1, 0.1f);
+      if(!grounded)
+      {
+        float moveDirectionY = moveDirection.y;
+        moveDirection = grappleHookLogic.grappleDirection * 10;
+        moveDirection.y = moveDirectionY;
+        moveDirection.y -= gravity * Time.deltaTime;;
+      }
+      else if(grounded)
+      {
+        isFallingFromGrapple = false;
+      }
+    }
+    else if(!playerController.isGrounded)
     {
       moveDirection.y -= gravity * Time.deltaTime;
     }
@@ -92,11 +111,11 @@ public class PlayerController : MonoBehaviour
     {
       moveDirection.y = 0f;
     }
-    
     playerController.Move(moveDirection * Time.deltaTime);
   }
   private void HandleJump()
   {
+    grappleHookLogic.shouldKeepGrappling = false;
     moveDirection.y = jumpForce;
   }
   private IEnumerator Dash()
