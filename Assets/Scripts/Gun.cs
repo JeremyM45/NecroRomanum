@@ -24,6 +24,7 @@ public class Gun : MonoBehaviour
   public bool isBurst;
   public int roundsInBurst;
   public float timeBetweenShotsInBurst;
+  public float minDecalPosDist {get; set;} = 0.1f;
   [SerializeField] private GameObject bulletDecal;
   [SerializeField] private GameObject enemyHitDecal;
   [SerializeField] private GameObject muzzleFlash;
@@ -91,13 +92,21 @@ public class Gun : MonoBehaviour
       GameObject obj;
       if(hit.transform.gameObject.layer == 9)
       {
-        if(!CheckIfCloseDecal(hit.point))
-        {
-          obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
-          obj.transform.position += obj.transform.forward / 10;
-        }
         LifeAndDeath enemyLad = hit.transform.GetComponentInParent<LifeAndDeath>();
         EnemyAi enemyAi = hit.transform.GetComponentInParent<EnemyAi>();
+        if(!CheckIfCloseDecal(hit.point))
+        {
+          if(pelletsFired < 1)
+          {
+            obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
+            obj.transform.position += obj.transform.forward / 10;
+          }
+          else if(pelletsFired > 1 && enemyAi.Alive)
+          {
+            obj = Instantiate(enemyHitDecal, hit.point, Quaternion.LookRotation(hit.normal));
+            obj.transform.position += obj.transform.forward / 10;
+          }
+        }
         if(enemyAi.Alive)
         {
           if(hit.transform.name == "Body")
