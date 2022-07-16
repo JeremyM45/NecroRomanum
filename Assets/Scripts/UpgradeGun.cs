@@ -91,9 +91,10 @@ public class UpgradeGun : MonoBehaviour
     
     if(isFirstTimeUpgrade)
     {
-      currentGun.damage = 6;
+      currentGun.damage = 8;
       currentGun.maxTotalAmmo = 160;
       currentGun.maxRoundsPerMag = 12;
+      currentGun.reloadTime = 0.5f;
     } 
     else
     {
@@ -101,6 +102,7 @@ public class UpgradeGun : MonoBehaviour
       currentGun.maxTotalAmmo = 240;
       currentGun.maxRoundsPerMag = 16;
       currentGun.isAutomatic = true;
+      currentGun.timeBetweenShots = 0.08f;
     }
   }
   private void UpgradeM1(bool isFirstTimeUpgrade)
@@ -111,6 +113,7 @@ public class UpgradeGun : MonoBehaviour
       currentGun.maxTotalAmmo = 120;
       currentGun.maxRoundsPerMag = 12;
       currentGun.penetrationAmount = 8;
+      currentGun.reloadTime = 1f;
     } 
     else
     {
@@ -130,6 +133,7 @@ public class UpgradeGun : MonoBehaviour
       currentGun.penetrationAmount = 2;
       currentGun.maxTotalAmmo = 92;
       currentGun.maxRoundsPerMag = 4;
+      currentGun.reloadTime = 0.7f;
     }
     else
     {
@@ -142,7 +146,7 @@ public class UpgradeGun : MonoBehaviour
   {
     if(isFirstTimeUpgrade)
     {
-      currentGun.damage = 8;
+      currentGun.damage = 6;
       currentGun.penetrationAmount = 2;
       currentGun.maxTotalAmmo = 500;
       currentGun.maxRoundsPerMag = 100;

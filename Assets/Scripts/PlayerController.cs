@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
   public bool CanMove {get; private set;} = true;
+  public bool isGrappling;
   private bool ShouldJump => Input.GetKey(jumpKey) && playerController.isGrounded;
   private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash;
 
@@ -60,7 +61,7 @@ public class PlayerController : MonoBehaviour
       {
         StartCoroutine(Dash());
       }
-      if(!dashing)
+      if(!dashing && !isGrappling)
       {
         HandleMovement();
         ApplyFinalMovements();
