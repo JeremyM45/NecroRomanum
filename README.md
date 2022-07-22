@@ -6,3 +6,6 @@
 
 #### Friday, 07/15
 * 8:00 - 3d modeling (weapon variants)
+
+#### Friday, 07/22
+* 8:00 - Making New Level
