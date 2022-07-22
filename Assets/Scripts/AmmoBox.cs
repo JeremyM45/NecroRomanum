@@ -5,7 +5,6 @@ using TMPro;
 
 public class AmmoBox : MonoBehaviour
 {
-  [SerializeField] private float range;
   [SerializeField] private int cost;
   [SerializeField] private TextMeshProUGUI textDisplay;
   private GameObject player;

@@ -6,7 +6,6 @@ using TMPro;
 public class Door : MonoBehaviour
 {
   [SerializeField] private int cost;
-  [SerializeField] private float range;
   [SerializeField] LayerMask playerLayer;
   [SerializeField] TextMeshProUGUI textDisplay;
   private Score playerScore;
