@@ -1199,8 +1199,8 @@ MonoBehaviour:
   attackDamage: 5
   minSpeed: 8
   maxSpeed: 15
-  baseKillScore: 5
-  headshotKillScore: 10
+  baseKillScore: 10
+  headshotKillScore: 20
   baseKillHPRegen: 5
   headshotKillHPRegen: 10
 --- !u!195 &4959150917677417177

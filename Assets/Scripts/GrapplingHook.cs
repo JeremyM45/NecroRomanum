@@ -22,6 +22,7 @@ public class GrapplingHook : MonoBehaviour
   
   private bool isShooting = false;
   private bool canGrapple = true;
+  private bool jumpedUp;
   private Rigidbody playerRb;
   private Vector3 grapplePoint;
   private PlayerController playerController;
@@ -45,8 +46,15 @@ public class GrapplingHook : MonoBehaviour
       if(Vector3.Distance(grappleHook.position, grapplePoint) < 0.5f)
       {
         playerController.isGrappling = true;
+        
         grappleDirection = grappleHook.TransformDirection(Vector3.forward);
-        playerBody.position = Vector3.Lerp(playerBody.position, grapplePoint - playerPosOffset, (moveSpeed / 2) * Time.deltaTime);
+        if(!jumpedUp)
+        {
+          Vector3 dir = transform.TransformDirection(transform.up * 2);
+          characterController.Move(dir);
+          jumpedUp = true;
+        }
+        playerBody.position = Vector3.Lerp(playerBody.position, grapplePoint - playerPosOffset, (moveSpeed / 4) * Time.deltaTime);
         Invoke("CanCutRope", 0.2f);
         if(!shouldKeepGrappling)
         {
@@ -59,8 +67,13 @@ public class GrapplingHook : MonoBehaviour
           playerController.isFallingFromGrapple = true;
           ableToCutRope = false;
           isGrappling = false;
+          jumpedUp = false;
         }
       }
+    }
+    if(isGrappling == false && playerController.isFallingFromGrapple == false && canGrapple == false)
+    {
+      Invoke("ResetCanGrapple", grapplingCooldown);
     }
     if(Input.GetKeyDown(KeyCode.Q) && canGrapple)
     {
@@ -84,9 +97,12 @@ public class GrapplingHook : MonoBehaviour
   }
   private void OnCollisionEnter(Collision obj)
   {
-    if(obj.gameObject.layer == 9)
+    if(isGrappling)
     {
-      shouldKeepGrappling = false;
+      if(obj.gameObject.layer != 8 && ableToCutRope)
+      {
+        shouldKeepGrappling = false;
+      }
     }
   }
   private void ShootGrapplingHook()

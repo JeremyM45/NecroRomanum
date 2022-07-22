@@ -38,7 +38,6 @@ public class EnemyAi : MonoBehaviour
   private GameObject player;
   private GlobalSpawnLogic globalSpawnLogic;
   private AudioSource audioSource;
-  
   private string[] deathAnimations = new string[] {"Death1", "Death2", "Death3"};
   private string deathAnim;
   void Awake()

@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
   public bool CanMove {get; private set;} = true;
   public bool isFallingFromGrapple;
   public bool isGrappling;
-  private bool ShouldJump => Input.GetKey(jumpKey) && playerController.isGrounded;
+  private bool ShouldJump => Input.GetKey(jumpKey) && (playerController.isGrounded || isGrappling);
   private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash;
 
   [Header("Controls")]
@@ -121,6 +121,7 @@ public class PlayerController : MonoBehaviour
   private IEnumerator Dash()
   {
     WaitForSeconds wait = new WaitForSeconds(0.001f);
+    isFallingFromGrapple = false;
     dashing = true;
     canDash = false;
     Vector3 dashDirection;

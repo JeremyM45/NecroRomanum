@@ -16,7 +16,6 @@ public class LifeAndDeath : MonoBehaviour
   [SerializeField] private bool canAutoRegenHp;
   [SerializeField] private int autoRegenAmount;
   [SerializeField] private int autoRegenIncrement;
-  
   private Coroutine regenHealthRoutine;
   void Awake()
   {
@@ -28,7 +27,6 @@ public class LifeAndDeath : MonoBehaviour
     {
       currentHealth = maxHealth;
     }
-
   }
   void Update()
   {
@@ -72,7 +70,6 @@ public class LifeAndDeath : MonoBehaviour
   }
   private IEnumerator RegenHealth(int regenAmount, int regenIncrement)
   {
-    
     if(timeBeforeRegenStarts != 0)
     {
       yield return new WaitForSeconds(timeBeforeRegenStarts);
