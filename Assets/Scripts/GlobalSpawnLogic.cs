@@ -5,6 +5,8 @@ using TMPro;
 public class GlobalSpawnLogic : MonoBehaviour
 {
   public int NumOfEnemiesLeft {get; private set;}
+  public int MaxEnemiesAlive {get; private set;}
+  public int NumOfEnemiesAlive {get; set;}
   public float MinSpeed {get; private set;}
   public float MaxSpeed {get; private set;}
   public int Hp {get; private set;}
@@ -14,6 +16,7 @@ public class GlobalSpawnLogic : MonoBehaviour
   [SerializeField] private float newRoundSpawnerCooldown;
   [SerializeField] private TextMeshProUGUI roundDisplay;
   [SerializeField] private TextMeshProUGUI enemyCounterDisplay;
+  [SerializeField] public TextMeshProUGUI enemyAliveCounterDisplay;
   private EnemyAi[] enemies;
   private List<EnemyAi> enemiesAlive = new List<EnemyAi>();
   
@@ -28,38 +31,45 @@ public class GlobalSpawnLogic : MonoBehaviour
   public void EnemiesLeftCalc(int deathAmount)
   {
     NumOfEnemiesLeft -= deathAmount;
+    NumOfEnemiesAlive -= deathAmount;
     enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
+    enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
   }
   public void RoundSettings()
   {
     switch(Round)
     {
       case 1:
+        MaxEnemiesAlive = 4;
         NumOfEnemiesToSpawn = 8;
         MinSpeed = 3;
         MaxSpeed = 5;
         Hp = 4;
         break;
       case 2:
+      MaxEnemiesAlive = 8;
         NumOfEnemiesToSpawn = 16;
         MinSpeed = 4;
         MaxSpeed = 6;
         Hp = 6;
         break;
       case 3:
+      MaxEnemiesAlive = 12;
         NumOfEnemiesToSpawn = 24;
         MinSpeed = 6;
         MaxSpeed = 8;
         Hp = 10;
         break;
       case 4:
+        MaxEnemiesAlive = 18;
         NumOfEnemiesToSpawn = 36;
         MinSpeed = 6;
         MaxSpeed = 10;
         Hp = 14;
         break;
       case 5:
-        NumOfEnemiesToSpawn = 56;
+        MaxEnemiesAlive = 24;
+        NumOfEnemiesToSpawn = 58;
         MinSpeed = 6;
         MaxSpeed = 12;
         Hp = 18;

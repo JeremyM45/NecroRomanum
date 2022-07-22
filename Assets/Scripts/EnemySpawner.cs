@@ -27,10 +27,12 @@ public class EnemySpawner : MonoBehaviour
       if(unlocked)
       {
         areaClear = !Physics.CheckSphere(transform.position, 5f, blockingObjects);
-        if(areaClear && globalSpawnLogic.NumOfEnemiesToSpawn > 0 && !globalSpawnLogic.NewRoundCooldown)
+        if(areaClear && globalSpawnLogic.NumOfEnemiesToSpawn > 0 && !globalSpawnLogic.NewRoundCooldown && globalSpawnLogic.NumOfEnemiesAlive < globalSpawnLogic.MaxEnemiesAlive)
         {
           Instantiate(objectToSpawn, transform.position, Quaternion.identity);
           globalSpawnLogic.NumOfEnemiesToSpawn--;
+          globalSpawnLogic.NumOfEnemiesAlive++;
+          globalSpawnLogic.enemyAliveCounterDisplay.SetText("Alive: " + globalSpawnLogic.NumOfEnemiesAlive);
         }
       }
     }
