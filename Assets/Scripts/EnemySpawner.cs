@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+  public bool unlocked;
   [SerializeField] float cooldown;
   [SerializeField] private LayerMask blockingObjects;
   [SerializeField] private GameObject objectToSpawn;
@@ -11,6 +12,7 @@ public class EnemySpawner : MonoBehaviour
   private int currentRound;
   private float cooldownWait;
   private bool areaClear;
+  
   void Start()
   {
     globalSpawnLogic = GameObject.Find("GlobalSpawnLogic").GetComponent<GlobalSpawnLogic>();
@@ -22,11 +24,14 @@ public class EnemySpawner : MonoBehaviour
     while(true)
     {
       yield return wait;
-      areaClear = !Physics.CheckSphere(transform.position, 5f, blockingObjects);
-      if(areaClear && globalSpawnLogic.NumOfEnemiesToSpawn > 0 && !globalSpawnLogic.NewRoundCooldown)
+      if(unlocked)
       {
-        Instantiate(objectToSpawn, transform.position, Quaternion.identity);
-        globalSpawnLogic.NumOfEnemiesToSpawn--;
+        areaClear = !Physics.CheckSphere(transform.position, 5f, blockingObjects);
+        if(areaClear && globalSpawnLogic.NumOfEnemiesToSpawn > 0 && !globalSpawnLogic.NewRoundCooldown)
+        {
+          Instantiate(objectToSpawn, transform.position, Quaternion.identity);
+          globalSpawnLogic.NumOfEnemiesToSpawn--;
+        }
       }
     }
   }

@@ -8,9 +8,9 @@ public class Door : MonoBehaviour
   [SerializeField] private int cost;
   [SerializeField] LayerMask playerLayer;
   [SerializeField] TextMeshProUGUI textDisplay;
+  [SerializeField] EnemySpawner[] spawners;
   private Score playerScore;
   private bool bought;
-  // Start is called before the first frame update
   void Start()
   {
     playerScore = GameObject.Find("Player").GetComponent<Score>();
@@ -37,6 +37,10 @@ public class Door : MonoBehaviour
   }
   void DestroyDoor()
   {
+    foreach(EnemySpawner spawner in spawners)
+    {
+      spawner.unlocked = true;
+    }
     Destroy(gameObject);
   }
 }
