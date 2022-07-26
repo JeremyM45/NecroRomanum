@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  public bool CanMove {get; private set;} = true;
+  public bool CanMove {get; set;} = true;
   public bool isFallingFromGrapple;
   public bool isGrappling;
   private bool ShouldJump => Input.GetKey(jumpKey) && (playerController.isGrounded || isGrappling);

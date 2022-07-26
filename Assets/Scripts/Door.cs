@@ -9,6 +9,7 @@ public class Door : MonoBehaviour
   [SerializeField] LayerMask playerLayer;
   [SerializeField] TextMeshProUGUI textDisplay;
   [SerializeField] EnemySpawner[] spawners;
+  [SerializeField] Door OtherDoorToUnlock;
   private Score playerScore;
   private bool bought;
   void Start()
@@ -27,6 +28,10 @@ public class Door : MonoBehaviour
         textDisplay.SetText("");
         bought = true;
         playerScore.removePoints(cost);
+        if(OtherDoorToUnlock != null)
+        {
+          OtherDoorToUnlock.DestroyDoor();
+        }
         Invoke("DestroyDoor", 0.2f);
       }
     }
@@ -35,7 +40,7 @@ public class Door : MonoBehaviour
   {
     textDisplay.SetText("");
   }
-  void DestroyDoor()
+  public void DestroyDoor()
   {
     foreach(EnemySpawner spawner in spawners)
     {
