@@ -5,7 +5,7 @@ using TMPro;
 
 public class LifeAndDeath : MonoBehaviour
 {
-  [SerializeField] private int maxHealth;
+  public int MaxHealth;
   [SerializeField] private int currentHealth;
   [SerializeField] private TextMeshProUGUI healthDisplay;
   [SerializeField] private bool isPlayer;
@@ -25,14 +25,14 @@ public class LifeAndDeath : MonoBehaviour
     }
     else
     {
-      currentHealth = maxHealth;
+      currentHealth = MaxHealth;
     }
   }
   void Update()
   {
     if(isPlayer)
     {
-      healthDisplay.SetText(currentHealth + " / " + maxHealth);
+      healthDisplay.SetText(currentHealth + " / " + MaxHealth);
       if(currentHealth <= 0)
       {
         transform.GetComponent<GameOver>().EndGame();
@@ -65,8 +65,9 @@ public class LifeAndDeath : MonoBehaviour
   }
   public void SetMaxHealth(int hp)
   {
-    maxHealth = hp;
-    currentHealth = maxHealth;
+    MaxHealth = hp;
+    currentHealth = MaxHealth;
+    maxRegenAmount = hp;
   }
   private IEnumerator RegenHealth(int regenAmount, int regenIncrement)
   {
