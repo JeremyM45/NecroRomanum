@@ -24,9 +24,11 @@ public class PlayerController : MonoBehaviour
   [SerializeField] private float jumpForce = 10f;
   [SerializeField] private float gravity = 30f;
   [Header("Dash Parameters")]
+  public int MaxDashCharges;
+  public float DashCooldown = 2f;
+  public int DashCharges;
   [SerializeField] private float dashAmount = 30f;
   [SerializeField] private float dashIncrement = 2f;
-  [SerializeField] private float dashCooldown = 2f;
 
   [Header("Sounds")]
   [SerializeField] AudioClip[] dashSounds;
@@ -38,7 +40,6 @@ public class PlayerController : MonoBehaviour
   private float rotaionX = 0f;
   private bool dashing = false;
   private bool canDash = true;
-  
   private GrapplingHook grappleHookLogic;
   
   // Start is called before the first frame update
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
     Cursor.lockState = CursorLockMode.Locked;
     Cursor.visible = false;
     grappleHookLogic = GetComponent<GrapplingHook>();
+    DashCharges = MaxDashCharges;
   }
 
   // Update is called once per frame
@@ -61,7 +63,7 @@ public class PlayerController : MonoBehaviour
       {
         HandleJump();
       }
-      if(ShouldDash)
+      if(ShouldDash && DashCharges > 0 && canDash)
       {
         StartCoroutine(Dash());
       }
@@ -118,6 +120,13 @@ public class PlayerController : MonoBehaviour
     grappleHookLogic.shouldKeepGrappling = false;
     moveDirection.y = jumpForce;
   }
+  private void ResetDashCharge()
+  {
+    if(DashCharges < MaxDashCharges)
+    {
+      DashCharges++;
+    }
+  }
   private IEnumerator Dash()
   {
     WaitForSeconds wait = new WaitForSeconds(0.001f);
@@ -148,8 +157,10 @@ public class PlayerController : MonoBehaviour
       yield return wait;
     }
     dashing = false;
-    WaitForSeconds cooldown = new WaitForSeconds(dashCooldown);
+    DashCharges--;
+    WaitForSeconds cooldown = new WaitForSeconds(DashCooldown / 8);
     yield return cooldown;
     canDash = true;
+    Invoke("ResetDashCharge", DashCooldown);
   }
 }
