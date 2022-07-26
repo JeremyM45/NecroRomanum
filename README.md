@@ -9,3 +9,6 @@
 
 #### Friday, 07/22
 * 8:00 - Making New Level
+
+#### Tuesday, 07/26
+* 8:00 - Adding Lighting to map
