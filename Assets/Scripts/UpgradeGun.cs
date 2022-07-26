@@ -31,11 +31,11 @@ public class UpgradeGun : MonoBehaviour
       {
         if(baseGun.activeSelf == true)
         {
-          cost = 250;
+          cost = 500;
         }
         else if(firstUpgrade.activeSelf == true)
         {
-          cost = 500;
+          cost = 1000;
         }
         textDisplay.SetText("Press 'E' To Upgrade " + currentGun.name + " for " + cost + " points");
         if(secondUpgrade.activeSelf == true)
