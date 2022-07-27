@@ -8,16 +8,16 @@ public class GrapplingHook : MonoBehaviour
   public bool shouldKeepGrappling;
   public bool ableToCutRope;
   public Vector3 grappleDirection;
+  public float MaxDistance;
+  public float GrapplingCooldown;
   [SerializeField] private Transform grappleHook;
   [SerializeField] private LineRenderer lineRenderer;
   [SerializeField] private Transform handPos;
   [SerializeField] private Transform playerBody;
   [SerializeField] private LayerMask grappleLayer;
-  [SerializeField] private float maxDistance;
   [SerializeField] private float moveSpeed;
   [SerializeField] private Vector3 playerPosOffset;
   [SerializeField] private Vector3 cutRopeMoveDist;
-  [SerializeField] private float grapplingCooldown;
   private bool isGrappling = false;
   
   private bool isShooting = false;
@@ -58,7 +58,6 @@ public class GrapplingHook : MonoBehaviour
         Invoke("CanCutRope", 0.2f);
         if(!shouldKeepGrappling)
         {
-          Invoke("ResetCanGrapple", grapplingCooldown);
           grappleHook.SetParent(handPos);
           grappleHook.localPosition = Vector3.zero;
           lineRenderer.enabled = false;
@@ -71,13 +70,14 @@ public class GrapplingHook : MonoBehaviour
         }
       }
     }
-    if(isGrappling == false && playerController.isFallingFromGrapple == false && canGrapple == false)
-    {
-      Invoke("ResetCanGrapple", grapplingCooldown);
-    }
-    if(Input.GetKeyDown(KeyCode.Q) && canGrapple)
+    // if(isGrappling == false && playerController.isFallingFromGrapple == false && canGrapple == false)
+    // {
+    //   Invoke("ResetCanGrapple", GrapplingCooldown);
+    // }
+    if(Input.GetKeyDown(KeyCode.Q) && canGrapple && !isShooting && !isGrappling)
     {
       ShootGrapplingHook();
+      Invoke("ResetCanGrapple", GrapplingCooldown);
     }
   }
   private void FixedUpdate()
@@ -112,7 +112,7 @@ public class GrapplingHook : MonoBehaviour
       isShooting = true;
       canGrapple = false;
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance).OrderBy(h => h.distance).ToArray();
+      RaycastHit[] hits = Physics.RaycastAll(ray, MaxDistance).OrderBy(h => h.distance).ToArray();
       if(hits.Length > 0)
       {
         RaycastHit hit = hits[0];
