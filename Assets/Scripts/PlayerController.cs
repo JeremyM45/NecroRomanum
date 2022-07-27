@@ -158,7 +158,7 @@ public class PlayerController : MonoBehaviour
     }
     dashing = false;
     DashCharges--;
-    WaitForSeconds cooldown = new WaitForSeconds(DashCooldown / 8);
+    WaitForSeconds cooldown = new WaitForSeconds(0.01f);
     yield return cooldown;
     canDash = true;
     Invoke("ResetDashCharge", DashCooldown);
