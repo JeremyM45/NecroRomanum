@@ -157,7 +157,7 @@ public class UpgradeGun : MonoBehaviour
       currentGun.maxTotalAmmo = 0;
       currentGun.maxRoundsPerMag = 999;
       currentGun.magOnly = true;
-      currentGun.timeBetweenShots = 0.04f;
+      currentGun.timeBetweenShots = 0.06f;
       currentGun.penetrationAmount = 4;
     }
   }
