@@ -19,6 +19,7 @@ public class GrapplingHook : MonoBehaviour
   [SerializeField] private float moveSpeed;
   [SerializeField] private Vector3 playerPosOffset;
   [SerializeField] private Vector3 cutRopeMoveDist;
+  [SerializeField] private LayerMask layers;
   private bool isGrappling = false;
   
   private bool isShooting = false;
@@ -74,7 +75,6 @@ public class GrapplingHook : MonoBehaviour
     if(Input.GetKeyDown(KeyCode.Q) && canGrapple && !isShooting && !isGrappling && GrapplingHookUnlocked)
     {
       ShootGrapplingHook();
-      Invoke("ResetCanGrapple", GrapplingCooldown);
     }
   }
   private void FixedUpdate()
@@ -109,10 +109,12 @@ public class GrapplingHook : MonoBehaviour
       isShooting = true;
       canGrapple = false;
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      RaycastHit[] hits = Physics.RaycastAll(ray, MaxDistance).OrderBy(h => h.distance).ToArray();
-      if(hits.Length > 0)
+      
+      RaycastHit hit;
+      bool rayHit = Physics.Raycast(ray, out hit, MaxDistance, -5, QueryTriggerInteraction.Ignore);
+      Debug.Log(rayHit);
+      if(rayHit)
       {
-        RaycastHit hit = hits[0];
         if(hit.collider.gameObject.layer != 8)
         {
           grapplePoint = hit.point;
@@ -122,7 +124,12 @@ public class GrapplingHook : MonoBehaviour
           lineRenderer.enabled = true;
           playerController.isGrappling = true;
           shouldKeepGrappling = true;
+          Invoke("ResetCanGrapple", GrapplingCooldown);
         }
+      }
+      else
+      {
+        ResetCanGrapple();
       }
       isShooting = false;
     }

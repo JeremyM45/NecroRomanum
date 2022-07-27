@@ -1085,7 +1085,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 1
-  m_Range: 1
+  m_Range: 0.2
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -1125,7 +1125,7 @@ Light:
   m_RenderingLayerMask: 1
   m_Lightmapping: 2
   m_LightShadowCasterMode: 0
-  m_AreaSize: {x: 15, y: 70}
+  m_AreaSize: {x: 5, y: 70}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
@@ -25023,6 +25023,10 @@ PrefabInstance:
     - target: {fileID: 7587244138036649101, guid: daf46628ca922ee4f8b1905e8b8cfbf6, type: 3}
       propertyPath: GrapplingCooldown
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7587244138036649101, guid: daf46628ca922ee4f8b1905e8b8cfbf6, type: 3}
+      propertyPath: grappleLayer.m_Bits
+      value: 759
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daf46628ca922ee4f8b1905e8b8cfbf6, type: 3}
@@ -54991,17 +54995,9 @@ MonoBehaviour:
   m_Mesh: {fileID: 1843624385}
   m_VersionIndex: 2151
   m_IsSelectable: 1
-  m_SelectedFaces: 04000000
-  m_SelectedEdges:
-  - a: 16
-    b: 17
-  - a: 18
-    b: 16
-  - a: 17
-    b: 19
-  - a: 19
-    b: 18
-  m_SelectedVertices: 10000000110000001200000013000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!1 &1594434992
 GameObject:
   m_ObjectHideFlags: 0
@@ -58137,7 +58133,7 @@ Light:
   m_Type: 3
   m_Shape: 0
   m_Color: {r: 0, g: 0.0060678744, b: 0.69803923, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.2
   m_Range: 1
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -68007,7 +68003,7 @@ Light:
   m_Type: 3
   m_Shape: 0
   m_Color: {r: 0.05597192, g: 0.6981132, b: 0, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.2
   m_Range: 1
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
