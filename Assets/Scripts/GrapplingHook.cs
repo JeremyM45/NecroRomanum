@@ -70,10 +70,6 @@ public class GrapplingHook : MonoBehaviour
         }
       }
     }
-    // if(isGrappling == false && playerController.isFallingFromGrapple == false && canGrapple == false)
-    // {
-    //   Invoke("ResetCanGrapple", GrapplingCooldown);
-    // }
     if(Input.GetKeyDown(KeyCode.Q) && canGrapple && !isShooting && !isGrappling)
     {
       ShootGrapplingHook();

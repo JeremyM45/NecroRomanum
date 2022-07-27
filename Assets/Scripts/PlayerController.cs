@@ -8,9 +8,9 @@ public class PlayerController : MonoBehaviour
   public bool CanMove {get; set;} = true;
   public bool isFallingFromGrapple;
   public bool isGrappling;
+  public bool DashUnlocked;
   private bool ShouldJump => Input.GetKey(jumpKey) && (playerController.isGrounded || isGrappling);
-  private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash;
-
+  private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash && DashUnlocked;
   [Header("Controls")]
   [SerializeField] private KeyCode jumpKey = KeyCode.Space;
   [SerializeField] private KeyCode dashKey = KeyCode.LeftShift;

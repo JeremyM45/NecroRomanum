@@ -19,14 +19,32 @@ public class UpgradeDash : MonoBehaviour
   {
     if(obj.name == "Player" && canPurchase)
     {
-      textDisplay.SetText("Press 'E' to Upgrade Dash for " + cost + " points");
-      if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+      if(!playerController.DashUnlocked)
       {
-        playerController.MaxDashCharges = 2;
-        playerController.DashCharges = 2;
-        playerController.DashCooldown = 2f;
-        canPurchase = false;
-        playerScore.removePoints(cost);
+        textDisplay.SetText("Press 'E' to Unlock Dash for " + cost + " points");
+        if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+        {
+          playerController.DashUnlocked = true;
+          canPurchase = false;
+          Invoke("ResetCanPurchase", 2f);
+          playerScore.removePoints(cost);
+          cost *= 2;
+          textDisplay.SetText("");
+        }
+      }
+      else
+      { 
+        textDisplay.SetText("Press 'E' to Upgrade Dash for " + cost + " points");
+        if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+        {
+          playerController.MaxDashCharges = 2;
+          playerController.DashCharges = 2;
+          playerController.DashCooldown = 2f;
+          canPurchase = false;
+          playerScore.removePoints(cost);
+          transform.GetComponent<BoxCollider>().enabled = false;
+          textDisplay.SetText("");
+        }
       }
     }
   }
