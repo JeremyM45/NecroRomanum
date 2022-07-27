@@ -232,7 +232,7 @@ public class Gun : MonoBehaviour
     {
       foreach(Vector3 hitPoint in decalPos)
       {
-        if(Vector3.Distance(hitPoint, currentHitPoint) < 0.1f)
+        if(Vector3.Distance(hitPoint, currentHitPoint) < 0.5f)
         {
           return true;
         }

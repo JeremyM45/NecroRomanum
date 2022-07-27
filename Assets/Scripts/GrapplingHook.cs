@@ -109,10 +109,8 @@ public class GrapplingHook : MonoBehaviour
       isShooting = true;
       canGrapple = false;
       Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-      
       RaycastHit hit;
       bool rayHit = Physics.Raycast(ray, out hit, MaxDistance, -5, QueryTriggerInteraction.Ignore);
-      Debug.Log(rayHit);
       if(rayHit)
       {
         if(hit.collider.gameObject.layer != 8)
