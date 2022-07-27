@@ -5,6 +5,7 @@ using System.Linq;
 
 public class GrapplingHook : MonoBehaviour
 {
+  public bool GrapplingHookUnlocked = false;
   public bool shouldKeepGrappling;
   public bool ableToCutRope;
   public Vector3 grappleDirection;
@@ -38,7 +39,7 @@ public class GrapplingHook : MonoBehaviour
   {
     if(isGrappling)
     {
-      if(Input.GetKeyDown(KeyCode.Q) && ableToCutRope)
+      if(Input.GetKeyDown(KeyCode.LeftShift) && ableToCutRope)
       {
         shouldKeepGrappling = false;
       }
@@ -70,7 +71,7 @@ public class GrapplingHook : MonoBehaviour
         }
       }
     }
-    if(Input.GetKeyDown(KeyCode.Q) && canGrapple && !isShooting && !isGrappling)
+    if(Input.GetKeyDown(KeyCode.Q) && canGrapple && !isShooting && !isGrappling && GrapplingHookUnlocked)
     {
       ShootGrapplingHook();
       Invoke("ResetCanGrapple", GrapplingCooldown);

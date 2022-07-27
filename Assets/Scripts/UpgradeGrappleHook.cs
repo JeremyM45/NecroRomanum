@@ -19,13 +19,31 @@ public class UpgradeGrappleHook : MonoBehaviour
   {
     if(obj.name == "Player" && canPurchase)
     {
-      textDisplay.SetText("Press 'E' to Upgrade Dash for " + cost + " points");
-      if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+      if(!playerGrapplingHook.GrapplingHookUnlocked)
       {
-        playerGrapplingHook.MaxDistance = 50;
-        playerGrapplingHook.GrapplingCooldown = 1f;
-        canPurchase = false;
-        playerScore.removePoints(cost);
+        textDisplay.SetText("Press 'E' to Unlock Grappling Hook for " + cost + " points");
+        if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+        {
+          playerGrapplingHook.GrapplingHookUnlocked = true;
+          canPurchase = false;
+          Invoke("ResetCanPurchase", 2f);
+          playerScore.removePoints(cost);
+          cost *= 2;
+          textDisplay.SetText("");
+        }
+      }
+      else
+      {
+        textDisplay.SetText("Press 'E' to Upgrade Grappling Hook for " + cost + " points");
+        if(Input.GetKey(KeyCode.E) && playerScore.CurrentScore >= cost)
+        {
+          playerGrapplingHook.MaxDistance = 50;
+          playerGrapplingHook.GrapplingCooldown = 1f;
+          canPurchase = false;
+          playerScore.removePoints(cost);
+          transform.GetComponent<BoxCollider>().enabled = false;
+          textDisplay.SetText("");
+        }
       }
     }
   }
