@@ -12,3 +12,6 @@
 
 #### Tuesday, 07/26
 * 8:00 - Adding Lighting to map
+
+#### Wednesday, 07/26
+* 8:00 - Refining light map
