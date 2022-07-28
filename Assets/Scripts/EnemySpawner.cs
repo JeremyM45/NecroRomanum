@@ -7,7 +7,7 @@ public class EnemySpawner : MonoBehaviour
   public bool unlocked;
   [SerializeField] float cooldown;
   [SerializeField] private LayerMask blockingObjects;
-  [SerializeField] private GameObject objectToSpawn;
+  [SerializeField] private GameObject[] objectsToSpawn;
   private GlobalSpawnLogic globalSpawnLogic;
   private int currentRound;
   private float cooldownWait;
@@ -17,6 +17,23 @@ public class EnemySpawner : MonoBehaviour
   {
     globalSpawnLogic = GameObject.Find("GlobalSpawnLogic").GetComponent<GlobalSpawnLogic>();
     StartCoroutine(SpawnCheck());
+  }
+  private void SpawnHelemeted()
+  {
+    Instantiate(objectsToSpawn[0], transform.position, Quaternion.identity);
+    globalSpawnLogic.NumOfEnemiesToSpawn--;
+    globalSpawnLogic.NumOfEnemiesAlive++;
+    globalSpawnLogic.HelmetedEnemiesToSpawn--;
+    globalSpawnLogic.HelmetedEnemiesAlive++;
+    globalSpawnLogic.enemyAliveCounterDisplay.SetText("Alive: " + globalSpawnLogic.NumOfEnemiesAlive);
+    globalSpawnLogic.helmetedAliveEnemiesCounterDisplay.SetText("Helemted Alive: " + globalSpawnLogic.HelmetedEnemiesAlive);
+  }
+  private void SpawnNonHelemeted()
+  {
+    Instantiate(objectsToSpawn[1], transform.position, Quaternion.identity);
+    globalSpawnLogic.NumOfEnemiesToSpawn--;
+    globalSpawnLogic.NumOfEnemiesAlive++;
+    globalSpawnLogic.enemyAliveCounterDisplay.SetText("Alive: " + globalSpawnLogic.NumOfEnemiesAlive);
   }
   IEnumerator SpawnCheck()
   {
@@ -29,10 +46,23 @@ public class EnemySpawner : MonoBehaviour
         areaClear = !Physics.CheckSphere(transform.position, 5f, blockingObjects);
         if(areaClear && globalSpawnLogic.NumOfEnemiesToSpawn > 0 && !globalSpawnLogic.NewRoundCooldown && globalSpawnLogic.NumOfEnemiesAlive < globalSpawnLogic.MaxEnemiesAlive)
         {
-          Instantiate(objectToSpawn, transform.position, Quaternion.identity);
-          globalSpawnLogic.NumOfEnemiesToSpawn--;
-          globalSpawnLogic.NumOfEnemiesAlive++;
-          globalSpawnLogic.enemyAliveCounterDisplay.SetText("Alive: " + globalSpawnLogic.NumOfEnemiesAlive);
+          if(globalSpawnLogic.HelmetedEnemiesToSpawn > 0)
+          {
+            int rng = Random.Range(0, 2);
+            if(rng == 0)
+            {
+              SpawnHelemeted();
+            }
+            else
+            {
+              SpawnNonHelemeted();
+            }
+          }
+          else
+          {
+            SpawnNonHelemeted();
+          }
+          
         }
       }
     }

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyAi : MonoBehaviour
 {
   public bool Alive {get; private set;}  = true;
-  public bool HasHelmet {get; private set;} = true;
+  public bool HasHelmet;
   public bool Headshot {get; set;} = false;
   [SerializeField] private GameObject helmet; 
   [SerializeField] private LayerMask playerLayerMask;
@@ -32,6 +32,7 @@ public class EnemyAi : MonoBehaviour
   private bool attacking = false;
   private bool canMakeSound;
   private bool canMove = true;
+  private bool startWithHelmet;
   private NavMeshAgent agent;
   private Animator animator;
   private LifeAndDeath ladScript;
@@ -52,6 +53,7 @@ public class EnemyAi : MonoBehaviour
     audioSource = GetComponent<AudioSource>();
     StartCoroutine(IdleSoundCheck());
     SetSpeed(globalSpawnLogic.MinSpeed, globalSpawnLogic.MaxSpeed);
+    startWithHelmet = HasHelmet;
   }
 
   // Update is called once per frame
@@ -106,8 +108,14 @@ public class EnemyAi : MonoBehaviour
       int killRegenIncrement = baseKillHPRegen / 5;
       player.GetComponent<LifeAndDeath>().RegenerateHealth(baseKillHPRegen, killRegenIncrement);
     }
-    
-    globalSpawnLogic.EnemiesLeftCalc(1);
+    if(startWithHelmet)
+    {
+      globalSpawnLogic.HelmetedEnemiesLeftCalc(1);
+    }
+    else
+    {
+      globalSpawnLogic.EnemiesLeftCalc(1);
+    }
     animator.Play(deathAnim);
     foreach(BoxCollider boxCollider in colliders)
     {

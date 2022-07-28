@@ -44,8 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08f9b33372bc8604cb6e5ea74dbc848b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlocked: 0
   cooldown: 0.5
   blockingObjects:
     serializedVersion: 2
     m_Bits: 768
-  objectToSpawn: {fileID: 4959150917677417176, guid: 9f5835d0095a1b14f8abbacf66582ffa, type: 3}
+  objectsToSpawn:
+  - {fileID: 4959150917677417176, guid: 9f5835d0095a1b14f8abbacf66582ffa, type: 3}
+  - {fileID: 4959150917677417176, guid: 7a671e9126b640445accf27e4b3c02bd, type: 3}

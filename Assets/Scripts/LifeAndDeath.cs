@@ -6,6 +6,7 @@ using TMPro;
 public class LifeAndDeath : MonoBehaviour
 {
   public int MaxHealth;
+  public bool CanTakeDamage {get; private set;} = true;
   [SerializeField] private int currentHealth;
   [SerializeField] private TextMeshProUGUI healthDisplay;
   [SerializeField] private bool isPlayer;
@@ -41,6 +42,7 @@ public class LifeAndDeath : MonoBehaviour
   }
   public void TakeDamage(int damage)
   {
+    CanTakeDamage = false;
     currentHealth -= damage;
     if(regenHealthRoutine != null)
     {
@@ -54,6 +56,7 @@ public class LifeAndDeath : MonoBehaviour
     {
       RegenerateHealth(autoRegenAmount, autoRegenIncrement);
     }
+    Invoke("ResetCanTakeDamage", 0.01f);
   }
   public int GetCurrentHealth()
   {
@@ -68,6 +71,10 @@ public class LifeAndDeath : MonoBehaviour
     MaxHealth = hp;
     currentHealth = MaxHealth;
     maxRegenAmount = hp;
+  }
+  private void ResetCanTakeDamage()
+  {
+    CanTakeDamage = true;
   }
   private IEnumerator RegenHealth(int regenAmount, int regenIncrement)
   {

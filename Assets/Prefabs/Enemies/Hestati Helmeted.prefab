@@ -1117,7 +1117,7 @@ GameObject:
   - component: {fileID: 4959150917677417178}
   - component: {fileID: 2325240143325420494}
   m_Layer: 9
-  m_Name: Hestati
+  m_Name: Hestati Helmeted
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1174,6 +1174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c77012b99946ef74bbc985a195800c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HasHelmet: 1
   helmet: {fileID: 3112021549273667106}
   playerLayerMask:
     serializedVersion: 2
@@ -1237,7 +1238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e0b76e9044924e4db69a09c3391fecb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  MaxHealth: 0
   currentHealth: 0
   healthDisplay: {fileID: 0}
   isPlayer: 0
@@ -1385,6 +1386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5193521929882655430}
   - component: {fileID: 5193521929882655431}
+  - component: {fileID: 915736194647301528}
   m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
@@ -1420,6 +1422,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.35, y: 0.4, z: 0.3}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &915736194647301528
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193521929882655429}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.4, y: 0.5, z: 0.4}
+  m_Center: {x: 0, y: 0.035, z: 0}
 --- !u!1 &5193521930645366264
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,6 +1445,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5193521930645366265}
   - component: {fileID: 5193521930645366266}
+  - component: {fileID: 7497803666554307683}
   m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
@@ -1464,6 +1480,19 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.8, y: 1.6, z: 0.4}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &7497803666554307683
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5193521930645366264}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2, y: 1.6, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5229027071830613311
 GameObject:

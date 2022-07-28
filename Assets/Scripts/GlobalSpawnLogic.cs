@@ -11,12 +11,16 @@ public class GlobalSpawnLogic : MonoBehaviour
   public float MaxSpeed {get; private set;}
   public int Hp {get; private set;}
   public int NumOfEnemiesToSpawn {get; set;}
+  public int HelmetedEnemiesToSpawn {get; set;}
+  public int HelmetedEnemiesAlive {get; set;}
   public bool NewRoundCooldown {get; private set;}
   public int Round;
   [SerializeField] private float newRoundSpawnerCooldown;
   [SerializeField] private TextMeshProUGUI roundDisplay;
   [SerializeField] private TextMeshProUGUI enemyCounterDisplay;
   [SerializeField] public TextMeshProUGUI enemyAliveCounterDisplay;
+  [SerializeField] public TextMeshProUGUI helmetedEnemiesCounterDisplay;
+  [SerializeField] public TextMeshProUGUI helmetedAliveEnemiesCounterDisplay;
   private EnemyAi[] enemies;
   private List<EnemyAi> enemiesAlive = new List<EnemyAi>();
   
@@ -26,9 +30,16 @@ public class GlobalSpawnLogic : MonoBehaviour
     StartCoroutine(RoundCheck());
     NewRoundCooldown = true;
     NumOfEnemiesLeft = 0;
+    NumOfEnemiesToSpawn = 0;
+    NumOfEnemiesAlive = 0;
+    HelmetedEnemiesToSpawn = 0;
+    HelmetedEnemiesAlive = 0;
     roundDisplay.SetText("I");
-    enemyCounterDisplay.SetText("Enemies: 0");
-    enemyAliveCounterDisplay.SetText("Alive: 0");
+    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesToSpawn);
+    enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
+    helmetedEnemiesCounterDisplay.SetText("Helmeted Enemies: " + HelmetedEnemiesToSpawn);
+    helmetedAliveEnemiesCounterDisplay.SetText("Helmeted Alive" + HelmetedEnemiesAlive);
+    
   }
   public void EnemiesLeftCalc(int deathAmount)
   {
@@ -36,6 +47,16 @@ public class GlobalSpawnLogic : MonoBehaviour
     NumOfEnemiesAlive -= deathAmount;
     enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
     enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
+  }
+  public void HelmetedEnemiesLeftCalc(int deathAmount)
+  {
+    NumOfEnemiesLeft -= deathAmount;
+    NumOfEnemiesAlive -= deathAmount;
+    HelmetedEnemiesAlive -= deathAmount;
+    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
+    enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
+    helmetedEnemiesCounterDisplay.SetText("Helmeted Enemies: " + HelmetedEnemiesToSpawn);
+    helmetedAliveEnemiesCounterDisplay.SetText("Helmeted Alive" + HelmetedEnemiesAlive);
   }
   public void RoundSettings()
   {
@@ -49,15 +70,17 @@ public class GlobalSpawnLogic : MonoBehaviour
         Hp = 4;
         break;
       case 2:
-      MaxEnemiesAlive = 8;
+        MaxEnemiesAlive = 8;
         NumOfEnemiesToSpawn = 16;
+        HelmetedEnemiesToSpawn = 2;
         MinSpeed = 4;
         MaxSpeed = 6;
         Hp = 6;
         break;
       case 3:
-      MaxEnemiesAlive = 12;
+        MaxEnemiesAlive = 12;
         NumOfEnemiesToSpawn = 24;
+        HelmetedEnemiesToSpawn = 8;
         MinSpeed = 6;
         MaxSpeed = 8;
         Hp = 10;
@@ -65,21 +88,31 @@ public class GlobalSpawnLogic : MonoBehaviour
       case 4:
         MaxEnemiesAlive = 18;
         NumOfEnemiesToSpawn = 36;
+        HelmetedEnemiesToSpawn = 16;
         MinSpeed = 6;
         MaxSpeed = 10;
         Hp = 14;
         break;
       case 5:
         MaxEnemiesAlive = 24;
-        NumOfEnemiesToSpawn = 58;
+        NumOfEnemiesToSpawn = 64;
+        HelmetedEnemiesToSpawn = 32;
         MinSpeed = 6;
         MaxSpeed = 12;
         Hp = 18;
         break;
     }
-    if(Round > 5)
+    if(Round > 10)
     {
-      NumOfEnemiesToSpawn = 72;
+      MaxEnemiesAlive = 64;
+      NumOfEnemiesToSpawn = 256;
+      HelmetedEnemiesToSpawn = 256;
+    }
+    else if(Round > 5)
+    {
+      MaxEnemiesAlive = 48;
+      NumOfEnemiesToSpawn = 128;
+      HelmetedEnemiesToSpawn = 64;
       Hp = 22;
     }
   }
@@ -92,6 +125,7 @@ public class GlobalSpawnLogic : MonoBehaviour
     RoundSettings();
     NumOfEnemiesLeft = NumOfEnemiesToSpawn;
     enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
+    helmetedEnemiesCounterDisplay.SetText("Helmeted Enemies: " + HelmetedEnemiesToSpawn);
     Invoke("NewRoundCooldownReset", newRoundSpawnerCooldown);
   }
   private void NewRoundCooldownReset()

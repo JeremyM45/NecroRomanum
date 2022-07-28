@@ -115,7 +115,7 @@ public class Gun : MonoBehaviour
             obj.transform.position += obj.transform.forward / 10;
           }
         }
-        if(enemyAi.Alive)
+        if(enemyAi.Alive && enemyLad.CanTakeDamage)
         {
           if(hit.transform.name == "Body")
           {
