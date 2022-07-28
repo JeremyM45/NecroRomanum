@@ -25,8 +25,6 @@ public class GlobalSpawnLogic : MonoBehaviour
   [SerializeField] public TextMeshProUGUI helmetedAliveEnemiesCounterDisplay;
   private EnemyAi[] enemies;
   private List<EnemyAi> enemiesAlive = new List<EnemyAi>();
-  
-  // Start is called before the first frame update
   void Start()
   {
     StartCoroutine(RoundCheck());
@@ -106,7 +104,7 @@ public class GlobalSpawnLogic : MonoBehaviour
     {
       MaxEnemiesAlive = 48;
       NumOfEnemiesToSpawn = 256;
-      AllHelmeted = true;
+      HelmetedEnemiesToSpawn = 256;
       MaxSpeed = 16;
     }
     else if(Round > 5)
@@ -118,7 +116,6 @@ public class GlobalSpawnLogic : MonoBehaviour
       MaxSpeed = 14;
     }
     NonHelmetedEnemiesToSpawn = NumOfEnemiesToSpawn - HelmetedEnemiesToSpawn;
-    Debug.Log("Min Speed: " + MinSpeed);
   }
   private void NewRound()
   {
