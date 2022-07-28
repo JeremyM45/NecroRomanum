@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
   {
     if(isFallingFromGrapple)
     {
-      bool grounded = Physics.Raycast(transform.position, transform.up * -1, 0.1f);
+      bool grounded = Physics.Raycast(transform.position, transform.up * -1, 0.25f);
       if(!grounded)
       {
         float moveDirectionY = moveDirection.y;
