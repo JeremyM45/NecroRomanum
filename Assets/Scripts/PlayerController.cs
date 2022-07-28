@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
   public bool isFallingFromGrapple;
   public bool isGrappling;
   public bool DashUnlocked;
-  private bool ShouldJump => Input.GetKey(jumpKey) && (playerController.isGrounded || isGrappling);
+  private bool ShouldJump => Input.GetKey(jumpKey) && (grounded || isGrappling);
   private bool ShouldDash => Input.GetKeyDown(dashKey) && canDash && DashUnlocked;
   [Header("Controls")]
   [SerializeField] private KeyCode jumpKey = KeyCode.Space;
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
   private float rotaionX = 0f;
   private bool dashing = false;
   private bool canDash = true;
+  private bool grounded = true;
   private GrapplingHook grappleHookLogic;
   
   // Start is called before the first frame update
@@ -88,11 +89,16 @@ public class PlayerController : MonoBehaviour
     arms.transform.localRotation = Quaternion.Euler(rotaionX, 0, 0);
     transform.Rotate(new Vector3(0, Input.GetAxisRaw("Mouse X") * lookSpeed * Time.deltaTime, 0));
   }
+  // private void HandleSlopeMovement()
+  // {
+  //   bool grounded = Physics.Raycast(transform.position, transform.up * -1, 0.25f);
+
+  // }
   private void ApplyFinalMovements()
   {
+    grounded = Physics.Raycast(transform.position, transform.up * -1, 0.25f);
     if(isFallingFromGrapple)
     {
-      bool grounded = Physics.Raycast(transform.position, transform.up * -1, 0.25f);
       if(!grounded)
       {
         float moveDirectionY = moveDirection.y;
@@ -105,14 +111,15 @@ public class PlayerController : MonoBehaviour
         isFallingFromGrapple = false;
       }
     }
-    else if(!playerController.isGrounded)
+    else if(!grounded)
     {
       moveDirection.y -= gravity * Time.deltaTime;
     }
-    else if(playerController.isGrounded && moveDirection.y < -1f)
+    else if(grounded && moveDirection.y < -1f)
     {
       moveDirection.y = 0f;
     }
+    moveDirection = AdjustMoveDirectionToSlope(moveDirection);
     playerController.Move(moveDirection * Time.deltaTime);
   }
   private void HandleJump()
@@ -126,6 +133,20 @@ public class PlayerController : MonoBehaviour
     {
       DashCharges++;
     }
+  }
+  private Vector3 AdjustMoveDirectionToSlope(Vector3 direction)
+  {
+    Ray ray = new Ray(transform.position, Vector3.down);
+    if(Physics.Raycast(ray, out RaycastHit hit, 0.2f))
+    {
+      Quaternion slopeRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+      Vector3 adjustedDirection = slopeRotation * direction;
+      if(adjustedDirection.y < 0)
+      {
+        return adjustedDirection;
+      }
+    }
+    return direction;
   }
   private IEnumerator Dash()
   {
