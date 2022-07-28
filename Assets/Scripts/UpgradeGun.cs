@@ -91,14 +91,14 @@ public class UpgradeGun : MonoBehaviour
     
     if(isFirstTimeUpgrade)
     {
-      currentGun.damage = 8;
+      currentGun.damage = 10;
       currentGun.maxTotalAmmo = 160;
       currentGun.maxRoundsPerMag = 12;
       currentGun.reloadTime = 0.5f;
     } 
     else
     {
-      currentGun.damage = 8;
+      currentGun.damage = 12;
       currentGun.maxTotalAmmo = 240;
       currentGun.maxRoundsPerMag = 16;
       currentGun.isAutomatic = true;
@@ -129,14 +129,14 @@ public class UpgradeGun : MonoBehaviour
   {
     if(isFirstTimeUpgrade)
     {
-      currentGun.damage = 2;
-      currentGun.penetrationAmount = 2;
+      currentGun.damage = 12;
       currentGun.maxTotalAmmo = 92;
       currentGun.maxRoundsPerMag = 4;
       currentGun.reloadTime = 0.7f;
     }
     else
     {
+      currentGun.damage = 16;
       currentGun.maxTotalAmmo = 128;
       currentGun.maxRoundsPerMag = 8;
       currentGun.isAutomatic = true;
