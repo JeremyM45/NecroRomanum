@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
           if(globalSpawnLogic.HelmetedEnemiesToSpawn > 0)
           {
             int rng = Random.Range(0, 2);
-            if(rng == 0)
+            if(rng == 0 || globalSpawnLogic.NonHelmetedEnemiesToSpawn <= 0)
             {
               SpawnHelemeted();
             }

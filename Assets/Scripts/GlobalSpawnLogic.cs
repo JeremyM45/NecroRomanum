@@ -12,8 +12,10 @@ public class GlobalSpawnLogic : MonoBehaviour
   public int Hp {get; private set;}
   public int NumOfEnemiesToSpawn {get; set;}
   public int HelmetedEnemiesToSpawn {get; set;}
+  public int NonHelmetedEnemiesToSpawn {get; set;}
   public int HelmetedEnemiesAlive {get; set;}
   public bool NewRoundCooldown {get; private set;}
+  public bool AllHelmeted {get; private set;}
   public int Round;
   [SerializeField] private float newRoundSpawnerCooldown;
   [SerializeField] private TextMeshProUGUI roundDisplay;
@@ -89,7 +91,6 @@ public class GlobalSpawnLogic : MonoBehaviour
         MaxEnemiesAlive = 18;
         NumOfEnemiesToSpawn = 36;
         HelmetedEnemiesToSpawn = 16;
-        MinSpeed = 6;
         MaxSpeed = 10;
         Hp = 14;
         break;
@@ -97,24 +98,27 @@ public class GlobalSpawnLogic : MonoBehaviour
         MaxEnemiesAlive = 24;
         NumOfEnemiesToSpawn = 64;
         HelmetedEnemiesToSpawn = 32;
-        MinSpeed = 6;
         MaxSpeed = 12;
         Hp = 18;
         break;
     }
     if(Round > 10)
     {
-      MaxEnemiesAlive = 64;
+      MaxEnemiesAlive = 48;
       NumOfEnemiesToSpawn = 256;
-      HelmetedEnemiesToSpawn = 256;
+      AllHelmeted = true;
+      MaxSpeed = 16;
     }
     else if(Round > 5)
     {
-      MaxEnemiesAlive = 48;
+      MaxEnemiesAlive = 36;
       NumOfEnemiesToSpawn = 128;
       HelmetedEnemiesToSpawn = 64;
       Hp = 22;
+      MaxSpeed = 14;
     }
+    NonHelmetedEnemiesToSpawn = NumOfEnemiesToSpawn - HelmetedEnemiesToSpawn;
+    Debug.Log("Min Speed: " + MinSpeed);
   }
   private void NewRound()
   {

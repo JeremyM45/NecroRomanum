@@ -89,11 +89,6 @@ public class PlayerController : MonoBehaviour
     arms.transform.localRotation = Quaternion.Euler(rotaionX, 0, 0);
     transform.Rotate(new Vector3(0, Input.GetAxisRaw("Mouse X") * lookSpeed * Time.deltaTime, 0));
   }
-  // private void HandleSlopeMovement()
-  // {
-  //   bool grounded = Physics.Raycast(transform.position, transform.up * -1, 0.25f);
-
-  // }
   private void ApplyFinalMovements()
   {
     grounded = Physics.Raycast(transform.position, transform.up * -1, 0.25f);
