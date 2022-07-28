@@ -20,10 +20,6 @@ public class GlobalSpawnLogic : MonoBehaviour
   public int Round;
   [SerializeField] private float newRoundSpawnerCooldown;
   [SerializeField] private TextMeshProUGUI roundDisplay;
-  [SerializeField] private TextMeshProUGUI enemyCounterDisplay;
-  [SerializeField] public TextMeshProUGUI enemyAliveCounterDisplay;
-  [SerializeField] public TextMeshProUGUI helmetedEnemiesCounterDisplay;
-  [SerializeField] public TextMeshProUGUI helmetedAliveEnemiesCounterDisplay;
   private EnemyAi[] enemies;
   private List<EnemyAi> enemiesAlive = new List<EnemyAi>();
   void Start()
@@ -36,28 +32,18 @@ public class GlobalSpawnLogic : MonoBehaviour
     HelmetedEnemiesToSpawn = 0;
     HelmetedEnemiesAlive = 0;
     roundDisplay.SetText("I");
-    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesToSpawn);
-    enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
-    helmetedEnemiesCounterDisplay.SetText("Helmeted Enemies: " + HelmetedEnemiesToSpawn);
-    helmetedAliveEnemiesCounterDisplay.SetText("Helmeted Alive" + HelmetedEnemiesAlive);
     
   }
   public void EnemiesLeftCalc(int deathAmount)
   {
     NumOfEnemiesLeft -= deathAmount;
     NumOfEnemiesAlive -= deathAmount;
-    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
-    enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
   }
   public void HelmetedEnemiesLeftCalc(int deathAmount)
   {
     NumOfEnemiesLeft -= deathAmount;
     NumOfEnemiesAlive -= deathAmount;
     HelmetedEnemiesAlive -= deathAmount;
-    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
-    enemyAliveCounterDisplay.SetText("Alive: " + NumOfEnemiesAlive);
-    helmetedEnemiesCounterDisplay.SetText("Helmeted Enemies: " + HelmetedEnemiesToSpawn);
-    helmetedAliveEnemiesCounterDisplay.SetText("Helmeted Alive" + HelmetedEnemiesAlive);
   }
   public void RoundSettings()
   {
@@ -131,8 +117,6 @@ public class GlobalSpawnLogic : MonoBehaviour
     NewRoundCooldown = true;
     RoundSettings();
     NumOfEnemiesLeft = NumOfEnemiesToSpawn;
-    enemyCounterDisplay.SetText("Enemies: " + NumOfEnemiesLeft);
-    helmetedEnemiesCounterDisplay.SetText("Helmeted Enemies: " + HelmetedEnemiesToSpawn);
     Invoke("NewRoundCooldownReset", newRoundSpawnerCooldown);
   }
   private void NewRoundCooldownReset()

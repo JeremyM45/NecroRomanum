@@ -25,15 +25,12 @@ public class EnemySpawner : MonoBehaviour
     globalSpawnLogic.NumOfEnemiesAlive++;
     globalSpawnLogic.HelmetedEnemiesToSpawn--;
     globalSpawnLogic.HelmetedEnemiesAlive++;
-    globalSpawnLogic.enemyAliveCounterDisplay.SetText("Alive: " + globalSpawnLogic.NumOfEnemiesAlive);
-    globalSpawnLogic.helmetedAliveEnemiesCounterDisplay.SetText("Helemted Alive: " + globalSpawnLogic.HelmetedEnemiesAlive);
   }
   private void SpawnNonHelemeted()
   {
     Instantiate(objectsToSpawn[1], transform.position, Quaternion.identity);
     globalSpawnLogic.NumOfEnemiesToSpawn--;
     globalSpawnLogic.NumOfEnemiesAlive++;
-    globalSpawnLogic.enemyAliveCounterDisplay.SetText("Alive: " + globalSpawnLogic.NumOfEnemiesAlive);
   }
   IEnumerator SpawnCheck()
   {
