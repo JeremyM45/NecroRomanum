@@ -14,6 +14,7 @@ public class GlobalSpawnLogic : MonoBehaviour
   public int HelmetedEnemiesToSpawn {get; set;}
   public int NonHelmetedEnemiesToSpawn {get; set;}
   public int HelmetedEnemiesAlive {get; set;}
+  public int Damage {get; set;}
   public bool NewRoundCooldown {get; private set;}
   public bool AllHelmeted {get; private set;}
   public int Round;
@@ -64,6 +65,7 @@ public class GlobalSpawnLogic : MonoBehaviour
     {
       case 1:
         MaxEnemiesAlive = 4;
+        Damage = 5;
         NumOfEnemiesToSpawn = 8;
         MinSpeed = 3;
         MaxSpeed = 5;
@@ -106,6 +108,10 @@ public class GlobalSpawnLogic : MonoBehaviour
       NumOfEnemiesToSpawn = 256;
       HelmetedEnemiesToSpawn = 256;
       MaxSpeed = 16;
+    }
+    else if (Round > 8)
+    {
+      Damage = 10;
     }
     else if(Round > 5)
     {

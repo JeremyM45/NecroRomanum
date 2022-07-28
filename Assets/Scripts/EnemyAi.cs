@@ -20,7 +20,6 @@ public class EnemyAi : MonoBehaviour
   [Header("Stats")]
   [SerializeField] private int helmetHP;
   [SerializeField] private float attackRange;
-  [SerializeField] private int attackDamage;
   [SerializeField] private float minSpeed;
   [SerializeField] private float maxSpeed;
   [Header("On Kill")]
@@ -33,6 +32,7 @@ public class EnemyAi : MonoBehaviour
   private bool canMakeSound;
   private bool canMove = true;
   private bool startWithHelmet;
+  private int attackDamage;
   private NavMeshAgent agent;
   private Animator animator;
   private LifeAndDeath ladScript;
@@ -53,6 +53,7 @@ public class EnemyAi : MonoBehaviour
     audioSource = GetComponent<AudioSource>();
     StartCoroutine(IdleSoundCheck());
     SetSpeed(globalSpawnLogic.MinSpeed, globalSpawnLogic.MaxSpeed);
+    SetDamage(globalSpawnLogic.Damage);
     startWithHelmet = HasHelmet;
   }
 
@@ -129,6 +130,10 @@ public class EnemyAi : MonoBehaviour
     maxSpeed = max;
     float speed = Random.Range(minSpeed, maxSpeed);
     agent.speed = speed;
+  }
+  private void SetDamage(int damage)
+  {
+    attackDamage = damage;
   }
   private void PlayAttackSound()
   {
