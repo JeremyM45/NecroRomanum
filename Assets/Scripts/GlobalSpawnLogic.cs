@@ -27,6 +27,8 @@ public class GlobalSpawnLogic : MonoBehaviour
     NewRoundCooldown = true;
     NumOfEnemiesLeft = 0;
     roundDisplay.SetText("I");
+    enemyCounterDisplay.SetText("Enemies: 0");
+    enemyAliveCounterDisplay.SetText("Alive: 0");
   }
   public void EnemiesLeftCalc(int deathAmount)
   {
