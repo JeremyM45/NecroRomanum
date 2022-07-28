@@ -6,6 +6,8 @@ public class GameOver : MonoBehaviour
 {
   public void EndGame()
   {
-    SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+    Cursor.lockState = CursorLockMode.None;
+    Cursor.visible = true;
+    SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
   }
 }
